@@ -1,0 +1,40 @@
+page-login {
+  $padding-top-logo: 20px;
+  $padding-bottom-logo: 10px;
+
+  ion-content {
+    background: url('../assets/bg-login.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .bg-logo {
+    background-color: white;
+  }
+
+  .logo {
+    padding-top: $padding-top-logo;
+    padding-bottom: $padding-bottom-logo;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+
+  input {
+    width: 100%;
+    height: 45px;
+    padding: 5px 16px;
+    margin: 4px 0;
+    border: 0;
+  }
+
+  .login-form {
+    margin-top: 45px;
+    padding: 0 10px;
+  }
+
+  button {
+    margin-top: 15px !important;
+  }
+}

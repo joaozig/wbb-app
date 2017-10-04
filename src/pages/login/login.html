@@ -1,0 +1,10 @@
+<ion-content>
+  <div class="bg-logo">
+    <img src="assets/logo.png" class="logo">
+  </div>
+  <div class="login-form">
+    <input type="text" placeholder="Usuário" [(ngModel)]="user.username" />
+    <input type="password" placeholder="Senha" [(ngModel)]="user.password" />
+    <button ion-button block (click)="login()">Entrar</button>
+  </div>
+</ion-content>
