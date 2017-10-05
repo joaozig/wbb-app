@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
@@ -7,7 +8,7 @@ import { API_URL } from '../../app/constants';
 @Injectable()
 export class LoginService {
 
-  constructor(public http: Http) { }
+  constructor(public http: Http, public storage: Storage) { }
 
   login(user): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -21,6 +22,7 @@ export class LoginService {
         .subscribe(response => {
           if(response.user) {
             var user = response.user[0];
+            this.storage.set('user', user);
             resolve(user);
           } else {
             reject('Usuário e/ou Senha incorreto(s)');
