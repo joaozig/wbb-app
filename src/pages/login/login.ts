@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import {
   NavController,
   LoadingController,
-  AlertController
+  AlertController,
+  MenuController
 } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
@@ -21,8 +22,10 @@ export class LoginPage {
     public navCtrl: NavController,
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
+    public menuCtrl: MenuController,
     public loginService: LoginService) {
 
+      menuCtrl.enable(false);
   }
 
   login() {
@@ -33,7 +36,8 @@ export class LoginPage {
 
     this.loginService.login(this.user).then(response => {
       loader.dismiss();
-      this.navCtrl.push(HomePage);
+      this.menuCtrl.enable(true);
+      this.navCtrl.setRoot(HomePage);
     }, error => {
       loader.dismiss();
       this.alertCtrl.create({
