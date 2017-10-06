@@ -17,10 +17,10 @@
       <hr />
     </div>
     <ion-list>
-      <button menuClose ion-item>
+      <button menuClose ion-item (click)="showPage('home')">
         <ion-icon name="football" item-start></ion-icon> Tabela Geral
       </button>
-      <button menuClose ion-item>
+      <button menuClose ion-item (click)="showPage('bet')">
         <ion-icon name="person-add" item-start></ion-icon> Adicionar Aposta
       </button>
       <button menuClose ion-item>
