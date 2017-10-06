@@ -1,33 +1,49 @@
 import { Component, ViewChild } from '@angular/core';
-import { Storage } from '@ionic/storage';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 
+import { LoginService } from '../pages/login/login.service';
+
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  providers: [LoginService]
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = null;
+  user: any = {};
+  limit: any = {limit: '-', limit_used: '-'};
 
   constructor(
-    public storage: Storage,
     public platform: Platform,
+    public events: Events,
     public statusBar: StatusBar,
-    public splashScreen: SplashScreen) {
+    public splashScreen: SplashScreen,
+    public loginService: LoginService) {
 
     this.initializeApp();
 
-    this.storage.get('user').then((val) => {
-      if (val) {
+    this.loginService.getLoggedUser().then((user) => {
+      if (user) {
+        this.user = user;
+        this.limit.limit = 'R$ ' + this.user.limit;
+        this.limit.limit_used = 'R$ ' + this.user.limit_used;
         this.rootPage = HomePage;
       } else {
         this.rootPage = LoginPage;
+      }
+    });
+
+    events.subscribe('user:logged', (user) => {
+      if (user) {
+        this.user = user;
+        this.limit.limit = 'R$ ' + this.user.limit;
+        this.limit.limit_used = 'R$ ' + this.user.limit_used;
       }
     });
   }
@@ -42,8 +58,19 @@ export class MyApp {
   }
 
   logout() {
-    this.storage.remove('user').then(() => {
+    this.loginService.removeUser().then(() => {
       this.nav.setRoot(LoginPage);
+    });
+  }
+
+  refreshLimit() {
+    this.limit.limit = 'atualizando...';
+    this.limit.limit_used = 'atualizando...';
+
+    this.loginService.getLimit(this.user).then((response) => {
+      this.limit = response;
+      this.limit.limit = 'R$ ' + this.limit.limit;
+      this.limit.limit_used = 'R$ ' + this.limit.limit_used;
     });
   }
 }

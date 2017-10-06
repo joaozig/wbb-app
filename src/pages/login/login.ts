@@ -3,7 +3,8 @@ import {
   NavController,
   LoadingController,
   AlertController,
-  MenuController
+  MenuController,
+  Events
 } from 'ionic-angular';
 
 import { HomePage } from '../home/home';
@@ -23,6 +24,7 @@ export class LoginPage {
     public loadingCtrl: LoadingController,
     public alertCtrl: AlertController,
     public menuCtrl: MenuController,
+    public events: Events,
     public loginService: LoginService) {
 
       menuCtrl.enable(false);
@@ -34,8 +36,9 @@ export class LoginPage {
     });
     loader.present();
 
-    this.loginService.login(this.user).then(response => {
+    this.loginService.login(this.user).then(user => {
       loader.dismiss();
+      this.events.publish('user:logged', user);
       this.menuCtrl.enable(true);
       this.navCtrl.setRoot(HomePage);
     }, error => {
