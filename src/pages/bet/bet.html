@@ -8,5 +8,25 @@
   </ion-header>
 
   <ion-content padding>
-    Bet Page
+    <div [hidden]="bet">
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Nome do apostador</ion-label>
+          <ion-input type="text" [(ngModel)]="player.name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Valor a ser apostado</ion-label>
+          <ion-input type="number" [(ngModel)]="player.betAmount"></ion-input>
+        </ion-item>
+      </ion-list>
+      <div style="margin-top: 35px;">
+        <button ion-button color="primary" block (click)="createBet()">
+          Adicionar Aposta
+        </button>
+      </div>
+    </div>
+    <div [hidden]="!bet">
+      Aposta Atual
+      <button ion-button (click)="removeBet()">Remover aposta</button>
+    </div>
   </ion-content>

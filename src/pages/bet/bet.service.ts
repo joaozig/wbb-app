@@ -32,6 +32,20 @@ export class BetService {
     });
   }
 
+  getCurrentBet(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.storage.get(BetService.betKey).then((bet) => {
+        if(bet) {
+          resolve(new Bet(bet));
+        }
+      });
+    });
+  }
+
+  removeBet(): Promise<any> {
+    return this.storage.remove(BetService.betKey);
+  }
+
   /** Private Methods  **/
 
   private _validateBet(playerName, betAmount) {
