@@ -31,6 +31,7 @@ export class BetPage {
         if(this.navCtrl.length() == 1) {
           this.events.publish('root:change', HomePage);
         } else {
+          this.events.publish('bet:created', bet);
           this.navCtrl.pop();
         }
       }, (errorMessage) => {
@@ -57,6 +58,7 @@ export class BetPage {
               this.bet = null;
               this.player.name = '';
               this.player.betAmount = '';
+              this.events.publish('bet:removed');
             });
           }
         }
