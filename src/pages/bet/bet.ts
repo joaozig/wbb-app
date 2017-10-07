@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, Events } from 'ionic-angular';
 
+import { HomePage } from '../home/home';
 import { BetService } from './bet.service';
 
 @Component({
@@ -16,6 +17,7 @@ export class BetPage {
   constructor(
     public navCtrl: NavController,
     public alertCtrl: AlertController,
+    public events: Events,
     public betService: BetService) {
     betService.getCurrentBet().then((bet) => {
       this.bet = bet;
@@ -26,6 +28,11 @@ export class BetPage {
     this.betService.addBet(this.player.name, this.player.betAmount)
       .then((bet) => {
         this.bet = bet;
+        if(this.navCtrl.length() == 1) {
+          this.events.publish('root:change', HomePage);
+        } else {
+          this.navCtrl.pop();
+        }
       }, (errorMessage) => {
         this.alertCtrl.create({
           title: 'Algo falhou :(',

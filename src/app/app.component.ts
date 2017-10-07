@@ -48,6 +48,10 @@ export class MyApp {
         this.limit.limit_used = 'R$ ' + this.user.limit_used;
       }
     });
+
+    events.subscribe('root:change', (page) => {
+      this.setRootPage(page);
+    });
   }
 
   initializeApp() {
