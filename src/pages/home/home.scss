@@ -1,3 +1,80 @@
 page-home {
+  .championship-list {
+    .championship-item {
+      background-color: #f8f8f8;
 
+      .icon {
+        vertical-align: middle;
+        margin-right: 8px;
+      }
+
+      .country-img {
+        vertical-align: middle;
+        margin-right: 8px;
+        width: 30px;
+        height: 20px;
+      }
+    }
+
+    .item-game .item-content {
+      padding: 16px !important;
+    }
+
+    .item-inner {
+      padding: 0 !important;
+    }
+
+    ion-label.label {
+      margin: 13px 10px !important;
+    }
+
+    .home-games {
+      padding: 7px 5px 12px;
+    }
+
+    .game-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .left-team-img {
+      float: left;
+      margin: auto auto auto 0;
+      width: 30px;
+      height: 30px;
+    }
+
+    .right-team-img {
+      float: right;
+      margin: auto 0 auto auto;
+      width: 30px;
+      height: 30px;
+    }
+
+    .left-team-name {
+      float: left;
+      margin: auto auto auto 0;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .right-team-name {
+      float: right;
+      margin: auto 0 auto auto;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .game-info {
+      font-size: 12px;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      text-align: center;
+      line-height: 50px;
+    }
+  }
 }
