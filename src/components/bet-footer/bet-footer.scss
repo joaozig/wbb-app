@@ -1,0 +1,17 @@
+bet-footer {
+  ion-toolbar {
+    button {
+      float: right;
+    }
+  }
+
+  .align-bet-footer {
+    color: white;
+    display: flex;
+    align-items: center;
+
+    button {
+      margin-left: auto;
+    }
+  }
+}

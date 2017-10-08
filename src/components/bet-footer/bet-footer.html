@@ -1,0 +1,14 @@
+<ion-toolbar color="dark">
+  <div [hidden]="bet">
+    <button ion-button (click)="goToBet()">Nova Aposta</button>
+  </div>
+	<div [hidden]="!bet">
+    <div class="align-bet-footer">
+      <div>
+        Aposta: <b>R$ {{bet?.getBetAmount()}}</b><br>
+        Prêmio: <b>R$ {{bet?.getJackpot()}}</b> (Palpites: {{bet?.tickets.length}})
+      </div>
+      <button ion-button (click)="goToBet()">Ver Aposta</button>
+    </div>
+  </div>
+</ion-toolbar>

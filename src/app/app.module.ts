@@ -5,6 +5,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
+import { BetFooterComponent } from '../components/bet-footer/bet-footer';
+
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { BetPage } from '../pages/bet/bet';
@@ -15,6 +17,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 @NgModule({
   declarations: [
     MyApp,
+    BetFooterComponent,
     LoginPage,
     HomePage,
     BetPage

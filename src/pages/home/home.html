@@ -3,16 +3,59 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>{{ user?.group }}</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+<ion-content>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <ion-list>
+    <div class="championship-list" *ngFor="let championship of championships">
+      <ion-item class="championship-item active">
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
+        <ion-icon name="add"></ion-icon>
+        <img [src]="championship.country.img" class="country-img">
+        {{ championship.country.name }} - {{ championship.name }}
+
+      </ion-item>
+
+      <ion-item class="item-game home-games"
+                *ngFor="let game of championship.games">
+
+        <div>
+          <div class="game-row">
+            <span class="left-team-name">{{game.teamA.name}}</span>
+            <span class="game-info">{{game.date}} {{game.time}}</span>
+            <span class="right-team-name">{{game.teamB.name}}</span>
+          </div>
+          <div class="game-row">
+            <img [src]="game.teamA.img" class="left-team-img">
+            <button ion-button small *ngIf="game.alreadyAdded">
+              {{game.currentTicket.ticketType.toLowerCase()}}:<br>
+              {{game.currentTicket.name}} ({{util.formattedTaxValue(game.currentTicket.tax)}})
+            </button>
+            <ng-container *ngIf="!game.alreadyAdded">
+              <button ion-button outline small color="dark"
+                      *ngFor="let ticket of game.ticketType[0].tickets"
+                      style="margin-right: 8px">
+
+                {{util.formattedTaxValue(ticket.tax)}}
+              </button>
+              <button ion-button outline small color="dark"
+                      (click)="seeMoreTickets(game, championship)">
+                mais {{game.total}} opções
+              </button>
+            </ng-container>
+            <img [src]="game.teamB.img" class="right-team-img">
+          </div>
+        </div>
+
+      </ion-item>
+    </div>
+  </ion-list>
+
 </ion-content>
+
+<ion-footer>
+  <bet-footer [bet]="bet"></bet-footer>
+</ion-footer>
