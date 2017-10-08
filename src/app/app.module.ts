@@ -10,6 +10,7 @@ import { BetFooterComponent } from '../components/bet-footer/bet-footer';
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { BetPage } from '../pages/bet/bet';
+import { ResultsPage } from '../pages/results/results';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -20,7 +21,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     BetFooterComponent,
     LoginPage,
     HomePage,
-    BetPage
+    BetPage,
+    ResultsPage
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     LoginPage,
     HomePage,
-    BetPage
+    BetPage,
+    ResultsPage
   ],
   providers: [
     StatusBar,

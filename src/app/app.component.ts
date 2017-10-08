@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { BetPage } from '../pages/bet/bet';
+import { ResultsPage } from '../pages/results/results';
 
 import { LoginService } from '../pages/login/login.service';
 
@@ -101,6 +102,8 @@ export class MyApp {
         this.setRootPage(HomePage); break;
       case 'bet':
         this.setRootPage(BetPage); break;
+      case 'results':
+        this.setRootPage(ResultsPage); break;
     }
   }
 
