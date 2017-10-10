@@ -7,13 +7,6 @@ page-home {
         vertical-align: middle;
         margin-right: 8px;
       }
-
-      .country-img {
-        vertical-align: middle;
-        margin-right: 8px;
-        width: 30px;
-        height: 20px;
-      }
     }
 
     .item-game .item-content {
@@ -26,10 +19,6 @@ page-home {
 
     ion-label.label {
       margin: 13px 10px !important;
-    }
-
-    .home-games {
-      padding: 7px 5px 12px;
     }
 
     .game-row {
@@ -50,31 +39,6 @@ page-home {
       margin: auto 0 auto auto;
       width: 30px;
       height: 30px;
-    }
-
-    .left-team-name {
-      float: left;
-      margin: auto auto auto 0;
-      font-weight: bold;
-      font-size: 12px;
-    }
-
-    .right-team-name {
-      float: right;
-      margin: auto 0 auto auto;
-      font-weight: bold;
-      font-size: 12px;
-    }
-
-    .game-info {
-      font-size: 12px;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      top: 0;
-      text-align: center;
-      line-height: 50px;
     }
   }
 }

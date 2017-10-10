@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Resultados</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="date-control-bar">
+    <button ion-button small outline icon-only (click)="prevDate()">
+      <ion-icon name="arrow-round-back"></ion-icon>
+    </button>
+    <span class="period">{{formattedInitialDate}} - {{formattedFinalDate}}</span>
+    <button ion-button small outline icon-only (click)="nextDate()">
+      <ion-icon name="arrow-round-forward"></ion-icon>
+    </button>
+    <button class="home" ion-button small outline icon-only (click)="currentDate()">
+      <ion-icon name="home"></ion-icon>
+    </button>
+  </div>
+  <ion-searchbar
+    [(ngModel)]="pesquisar.date"
+    placeholder="Procurar">
+  </ion-searchbar>
+
+  <div class="loader" [hidden]="!loading">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list [hidden]="loading">
+    <div *ngFor="let result of results | filterBy: pesquisar; let i = index">
+      <ion-item-divider color="dark" (click)="toggleGroup(i)">
+        <b>
+          <ion-icon name="add" [hidden]="shownGroup[i]"></ion-icon>
+          <ion-icon name="remove" [hidden]="!shownGroup[i]"></ion-icon>
+          <span>{{result.date}}</span>
+        </b>
+      </ion-item-divider>
+
+      <div *ngFor="let championship of result.championship" [hidden]="!shownGroup[i]">
+        <ion-list-header color="stable">
+          <img [src]="championship.country[0].img" class="country-img">
+          <span><b>{{championship.country[0].name}} - {{championship.name}}</b></span>
+        </ion-list-header>
+        <ion-item class="home-games" *ngFor="let game of championship.games">
+          <span class="left-team-name">{{game.teamA}}</span>
+          <span class="game-info"><b>{{game.scoreA}} x {{game.scoreB}}</b></span>
+          <span class="right-team-name">{{game.teamB}}</span>
+        </ion-item>
+      </div>
+    </div>
+  </ion-list>
+</ion-content>
