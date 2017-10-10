@@ -20,17 +20,13 @@
       <ion-icon name="home"></ion-icon>
     </button>
   </div>
-  <ion-searchbar
-    [(ngModel)]="pesquisar.date"
-    placeholder="Procurar">
-  </ion-searchbar>
 
   <div class="loader" [hidden]="!loading">
     <ion-spinner></ion-spinner>
   </div>
 
   <ion-list [hidden]="loading">
-    <div *ngFor="let result of results | filterBy: pesquisar; let i = index">
+    <div *ngFor="let result of results; let i = index">
       <ion-item-divider color="dark" (click)="toggleGroup(i)">
         <b>
           <ion-icon name="add" [hidden]="shownGroup[i]"></ion-icon>
@@ -39,7 +35,10 @@
         </b>
       </ion-item-divider>
 
-      <div *ngFor="let championship of result.championship" [hidden]="!shownGroup[i]">
+      <div
+        *ngFor="let championship of result.championship"
+        [hidden]="!shownGroup[i]">
+
         <ion-list-header color="stable">
           <img [src]="championship.country[0].img" class="country-img">
           <span><b>{{championship.country[0].name}} - {{championship.name}}</b></span>

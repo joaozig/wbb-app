@@ -17,7 +17,6 @@ export class ResultsPage {
   finalDate: any;
   formattedInitialDate: any;
   formattedFinalDate: any;
-  pesquisar: any = '';
   shownGroup: any;
   loading: Boolean;
 
@@ -35,7 +34,6 @@ export class ResultsPage {
   }
 
   prevDate() {
-    console.log(this.pesquisar);
   	this.setDates(this.initialDate.setDate(this.initialDate.getDate() - 2));
   }
 
