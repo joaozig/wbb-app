@@ -15,6 +15,13 @@
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
 
+.loader {
+	margin-top: 15px;
+	display:flex;
+	justify-content:center;
+	align-items:center;
+}
+
 .nav-bar-img-logo {
 	padding-top: 10px;
 	height: 30px;
@@ -31,4 +38,40 @@
 	hr {
 		margin-top: 15px;
 	}
+}
+
+.home-games {
+	padding: 7px 5px 12px;
+}
+
+.country-img {
+	vertical-align: middle;
+	margin-right: 8px;
+	width: 30px;
+	height: 20px;
+}
+
+.game-info {
+	font-size: 12px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	text-align: center;
+	line-height: 50px;
+}
+
+.left-team-name {
+	float: left;
+	margin: auto auto auto 0;
+	font-weight: bold;
+	font-size: 12px;
+}
+
+.right-team-name {
+	float: right;
+	margin: auto 0 auto auto;
+	font-weight: bold;
+	font-size: 12px;
 }
