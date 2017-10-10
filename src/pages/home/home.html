@@ -11,15 +11,20 @@
 
   <ion-list>
     <div class="championship-list" *ngFor="let championship of championships">
-      <ion-item class="championship-item active">
 
-        <ion-icon name="add"></ion-icon>
+      <ion-item
+        class="championship-item"
+        [ngClass]="{'active' : isGroupShown(championship)}"
+        (click)="toggleGroup(championship)">
+
+        <ion-icon name="add" [hidden]="isGroupShown(championship)"></ion-icon>
+        <ion-icon name="remove" [hidden]="!isGroupShown(championship)"></ion-icon>
         <img [src]="championship.country.img" class="country-img">
         {{ championship.country.name }} - {{ championship.name }}
-
       </ion-item>
 
       <ion-item class="item-game home-games"
+                [hidden]="!isGroupShown(championship)"
                 *ngFor="let game of championship.games">
 
         <div>

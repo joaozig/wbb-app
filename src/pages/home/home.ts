@@ -25,24 +25,36 @@ export class HomePage {
     public events: Events,
     public loginService: LoginService,
     public betService: BetService,
-    public gameService: GameService) {
+    public gameService: GameService) { }
 
-    loginService.getLoggedUser().then((user) => {
+  ngOnInit() {
+    console.log('entrou aqui no constructor');
+    this.loginService.getLoggedUser().then((user) => {
       this.user = user;
-      events.publish('user:loaded');
+      console.log('entrou aqui');
+      this.events.publish('user:loaded');
     });
 
-    betService.getCurrentBet().then((bet) => {
+    this.betService.getCurrentBet().then((bet) => {
       this.bet = bet;
     });
 
-    events.subscribe('user:loaded', () => {
+    this.events.subscribe('user:loaded', () => {
       this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
         .then((championships) => {
           this.championships = championships;
+          this.toggleGroup(this.championships[0]);
         }, error => {
           console.log(error);
         });
     });
+  }
+
+  toggleGroup(group) {
+    group.show = !group.show;
+  }
+
+  isGroupShown(group) {
+    return group.show;
   }
 }
