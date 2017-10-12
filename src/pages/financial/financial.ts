@@ -31,9 +31,9 @@ export class FinancialPage {
 
     this.sellerId = navParams.get('seller');
     this.groupId = navParams.get('group');
-    console.log(this.sellerId);
-    console.log(this.groupId);
-    this.currentDate();
+    let initialDate = navParams.get('initialDate');
+
+    this.currentDate(initialDate);
   }
 
   currentDate(initialDate=null) {
