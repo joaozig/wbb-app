@@ -23,8 +23,11 @@
       <button menuClose ion-item (click)="showPage('bet')">
         <ion-icon name="person-add" item-start></ion-icon> Adicionar Aposta
       </button>
-      <button menuClose ion-item>
+      <button menuClose ion-item (click)="showPage('financial')" *ngIf="user.profile == 20">
         <ion-icon name="logo-usd" item-start></ion-icon> Financeiro
+      </button>
+      <button menuClose ion-item (click)="showPage('manager')" *ngIf="user.profile != 20">
+        <ion-icon name="logo-usd" item-start></ion-icon> Financeiro (Gerente)
       </button>
       <button menuClose ion-item (click)="showPage('results')">
         <ion-icon name="medal" item-start></ion-icon> Resultados

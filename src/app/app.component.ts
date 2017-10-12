@@ -7,6 +7,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { BetPage } from '../pages/bet/bet';
 import { ResultsPage } from '../pages/results/results';
+import { FinancialPage } from '../pages/financial/financial';
 
 import { LoginService } from '../pages/login/login.service';
 
@@ -104,6 +105,12 @@ export class MyApp {
         this.setRootPage(BetPage); break;
       case 'results':
         this.setRootPage(ResultsPage); break;
+      case 'financial':
+        this.nav.setRoot(FinancialPage, {
+          seller: this.user.id,
+          group: 0
+        });
+        break;
     }
   }
 
