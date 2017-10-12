@@ -1,0 +1,37 @@
+page-financial {
+  .seller-group{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+      font-weight: 700;
+    border-color: #111;
+      background-color: #2C3E50;
+      color: #fff;
+  }
+
+  .bet-info {
+    float: left;
+
+    .bet-date {
+      font-size: 12px;
+    }
+
+    .bet-hash {
+      font-size: 9px;
+    }
+  }
+
+  .bet-amount-info {
+    float: right;
+    text-align: right;
+
+    span {
+      font-size: 12px;
+    }
+
+    span:first-child {
+      font-size: 14px;
+    }
+  }
+}
