@@ -1,29 +1,4 @@
 page-results {
-  .date-control-bar {
-    display: flex;
-    background-color: #8DB3C4;
-    height: 44px;
-    color: white;
-    align-items: center;
-    justify-content: center;
-
-    span.period {
-      margin: 0 5px;
-      font-weight: bold;
-    }
-
-    button {
-      border-color: #6a9db4;
-      color: #fff;
-    }
-
-    button.home {
-      margin: auto;
-      position: absolute;
-      right: 5px;
-    }
-  }
-
   ion-item-divider {
     .icon {
       vertical-align: middle;
