@@ -3,24 +3,30 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { Util } from '../../app/util';
 
-import { FinancialService } from './financial.service';
+import { FinancialPage } from '../financial/financial';
+import { FinancialService } from '../financial/financial.service';
 
 @Component({
-  selector: 'page-financial',
-  templateUrl: 'financial.html',
+  selector: 'page-manager',
+  templateUrl: 'manager.html',
   providers: [FinancialService]
 })
-export class FinancialPage {
+export class ManagerPage {
 
-  sellers: any;
+  util: any = Util;
+  general: any;
+  showGeneral: any;
+  groups: any;
+  shownGroup: any;
   resume: any;
+  comissions: any;
+  prizes: any;
+  netValues: any;
+
   initialDate: any;
   finalDate: any;
   formattedInitialDate: any;
   formattedFinalDate: any;
-  shownGroup: any = [true, true, true];
-  sellerId: any;
-  groupId: any;
   loading: Boolean;
 
   constructor(
@@ -29,20 +35,15 @@ export class FinancialPage {
     public alertCtrl: AlertController,
     public financialService: FinancialService) {
 
-    this.sellerId = navParams.get('seller');
-    this.groupId = navParams.get('group');
-    let initialDate = navParams.get('initialDate');
-
-    this.currentDate(initialDate);
+    let date: any = navParams.get('initialDate');
+		if(!date || date == 'initial') {
+			date = new Date();
+    }
+    this.setDates(date);
   }
 
-  currentDate(initialDate=null) {
-    let date: any = new Date();
-
-    if(initialDate) {
-      date = initialDate;
-    }
-
+  currentDate() {
+    var date = new Date();
     this.setDates(date);
   }
 
@@ -68,10 +69,17 @@ export class FinancialPage {
   loadData() {
 		var initialDate = Util.formatFilterDate(this.initialDate);
 		var finalDate = Util.formatFilterDate(this.finalDate);
-    this.financialService.getBets(initialDate, finalDate, this.sellerId, this.groupId)
+    this.financialService.getResume(initialDate, finalDate)
       .then((response) => {
-        this.sellers = response.dados;
-        this.resume = response.resume;
+				this.general = response.shift();
+				this.groups = response;
+
+				if(this.general.admin) {
+					this.showGeneral = true;
+				} else {
+					this.showGeneral = false;
+					this.toggleGroup(this.groups[0]);
+				}
         this.loading = false;
 
       }, (errorMessage) => {
@@ -83,35 +91,23 @@ export class FinancialPage {
       });
   }
 
-	toggleGroup(index) {
-    this.shownGroup[index] = !this.shownGroup[index];
-  };
-
-  typeClass(typeIndex) {
-  	if(typeIndex == 0) {
-  		return 'item-dark';
-  	} else if(typeIndex == 1) {
-  		return 'item-positive';
-  	} else if(typeIndex == 2) {
-  		return 'item-assertive';
-  	}
+  sellerBets(group) {
+    this.navCtrl.push(FinancialPage, {
+      group: group.id,
+      seller: 0,
+      initialDate: this.initialDate
+    });
   }
 
-  getColorBetStatus(status) {
-		if(status.toLowerCase() == 'perdeu'){
-			return 'red';
-		} else if(status.toLowerCase() == 'pendente') {
-			return 'green';
-		} else {
-			return 'green';
-		}
-	}
+	toggleGroup(group) {
+    if (this.isGroupShown(group)) {
+      this.shownGroup = null;
+    } else {
+      this.shownGroup = group;
+    }
+  }
 
-	getColorNetValue(value) {
-		if(parseFloat(value) < 0){
-			return '#FF4C4C';
-		} else {
-			return '#6AB56A';
-		}
-	}
+  isGroupShown(group) {
+    return this.shownGroup === group;
+  }
 }

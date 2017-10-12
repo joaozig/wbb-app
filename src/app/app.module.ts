@@ -11,6 +11,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { BetPage } from '../pages/bet/bet';
 import { ResultsPage } from '../pages/results/results';
+import { ManagerPage } from '../pages/manager/manager';
 import { FinancialPage } from '../pages/financial/financial';
 
 import { StatusBar } from '@ionic-native/status-bar';
@@ -24,6 +25,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     BetPage,
     ResultsPage,
+    ManagerPage,
     FinancialPage,
   ],
   imports: [
@@ -39,6 +41,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     BetPage,
     ResultsPage,
+    ManagerPage,
     FinancialPage,
   ],
   providers: [

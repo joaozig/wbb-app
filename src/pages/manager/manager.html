@@ -1,0 +1,145 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Resumo Financeiro</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="date-control-bar">
+    <button ion-button small outline icon-only (click)="prevDate()">
+      <ion-icon name="arrow-round-back"></ion-icon>
+    </button>
+    <span class="period">{{formattedInitialDate}} - {{formattedFinalDate}}</span>
+    <button ion-button small outline icon-only (click)="nextDate()">
+      <ion-icon name="arrow-round-forward"></ion-icon>
+    </button>
+    <button class="home" ion-button small outline icon-only (click)="currentDate()">
+      <ion-icon name="home"></ion-icon>
+    </button>
+  </div>
+
+  <div class="loader" [hidden]="!loading">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list [hidden]="loading">
+    <div [hidden]="!showGeneral">
+      <ion-item color="stable">
+        <b>BRUTO</b>
+        <span class="financial-value">
+          R$ {{util.formattedValue(general?.info.resume.grossValue)}}
+        </span>
+      </ion-item>
+      <ion-item>
+        <b>PRÊMIOS</b>
+        <span class="financial-value">
+          R$ {{util.formattedValue(general?.info.resume.prize)}}
+        </span>
+      </ion-item>
+      <ion-item color="stable">
+        <b>COMISSÕES</b>
+        <span class="financial-value">
+          R$ {{util.formattedValue(general?.info.resume.commission)}}
+        </span>
+      </ion-item>
+      <ion-item>
+        <b>LÍQUIDO</b>
+        <span class="financial-value"
+          [ngClass]="{'negative-value' : general?.info.resume.netValue < 0}">
+
+          R$ {{util.formattedValue(general?.info.resume.netValue)}}
+        </span>
+      </ion-item>
+    </div>
+
+    <div *ngFor="let group of groups">
+
+      <ion-item color="dark"
+            (click)="toggleGroup(group)"
+            [ngClass]="{active: isGroupShown(group)}">
+
+        <ion-icon name="add" [hidden]="isGroupShown(group)"></ion-icon>
+        <ion-icon name="remove" [hidden]="!isGroupShown(group)"></ion-icon>
+        {{group.name}}
+        <span class="financial-value" [ngClass]="{'negative-value' : group.info.resume.netValue < 0}">
+          R$ {{util.formattedValue(group.info.resume.netValue)}}
+        </span>
+      </ion-item>
+
+      <div [hidden]="!isGroupShown(group)">
+        <ion-item-divider>
+          <b>BRUTO</b>
+          <span class="financial-value">
+            R$ {{util.formattedValue(group.info.resume.grossValue)}}
+          </span>
+        </ion-item-divider>
+        <ion-item-divider>
+          <b>PRÊMIOS</b>
+          <span class="financial-value">
+            R$ {{util.formattedValue(group.info.resume.prize)}}
+          </span>
+        </ion-item-divider>
+        <ion-item-divider>
+          <b>COMISSÕES</b>
+          <span class="financial-value">
+            R$ {{util.formattedValue(group.info.resume.commission)}}
+          </span>
+        </ion-item-divider>
+        <ion-item-divider>
+          <b>LÍQUIDO</b>
+          <span class="financial-value" [ngClass]="{'negative-value' : group.info.resume.netValue < 0}">
+            R$ {{util.formattedValue(group.info.resume.netValue)}}
+          </span>
+        </ion-item-divider>
+
+        <ion-item-divider>
+          <button ion-button block small color="positive"
+            style="margin: 0;"
+            (click)="sellerBets(group)">
+
+            Ver apostas
+          </button>
+        </ion-item-divider>
+
+        <ion-item-divider color="calm" style="text-align: center">
+          <b>COMISSÕES</b>
+        </ion-item-divider>
+        <button ion-item class="item-icon-right"
+          (click)="sellerBets(group)"
+          *ngFor="let commission of group.info.comission; let i = index;">
+
+          {{commission.name}}
+          <span style="float: right">R$ {{util.formattedValue(commission.value)}}</span>
+        </button>
+
+        <ion-item-divider color="calm" style="text-align: center">
+          <b>PRÊMIOS</b>
+        </ion-item-divider>
+        <button ion-item class="item-icon-right"
+          (click)="sellerBets(group)"
+          *ngFor="let prize of group.info.jackpot; let i = index;">
+
+          {{prize.name}}
+          <span style="float: right">R$ {{util.formattedValue(prize.value)}}</span>
+        </button>
+
+        <ion-item-divider color="calm" style="text-align: center">
+          <b>LÍQUIDO</b>
+        </ion-item-divider>
+        <button ion-item class="item-icon-right"
+          (click)="sellerBets(group)"
+          *ngFor="let netValue of group.info.netvalue; let i = index;">
+
+          {{netValue.name}}
+          <span style="float: right" [ngClass]="{'negative-value' : netValue.value < 0}">
+            R$ {{util.formattedValue(netValue.value)}}
+          </span>
+        </button>
+      </div>
+
+    </div>
+  </ion-list>
+</ion-content>
