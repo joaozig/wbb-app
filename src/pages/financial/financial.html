@@ -1,0 +1,53 @@
+<ion-header>
+    <ion-navbar color="dark">
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title>Financeiro</ion-title>
+    </ion-navbar>
+  </ion-header>
+
+  <ion-content>
+    <div class="date-control-bar">
+      <button ion-button small outline icon-only (click)="prevDate()">
+        <ion-icon name="arrow-round-back"></ion-icon>
+      </button>
+      <span class="period">{{formattedInitialDate}} - {{formattedFinalDate}}</span>
+      <button ion-button small outline icon-only (click)="nextDate()">
+        <ion-icon name="arrow-round-forward"></ion-icon>
+      </button>
+      <button class="home" ion-button small outline icon-only (click)="currentDate()">
+        <ion-icon name="home"></ion-icon>
+      </button>
+    </div>
+
+    <div class="loader" [hidden]="!loading">
+      <ion-spinner></ion-spinner>
+    </div>
+
+    <div [hidden]="loading">
+      <ion-list *ngFor="let seller of sellers">
+        <ion-item-divider color="dark" class="seller-group">
+          {{seller.situation}} {{seller.name}}
+        </ion-item-divider>
+        <button
+          ion-item
+          class="item-game item-icon-right item-bets"
+          *ngFor="let bet of seller.bets"
+          (click)="betResume(bet)">
+
+          <div class="bet-info">
+            <span><b>{{bet.name}}</b></span><br>
+            <span class="bet-date">{{bet.date}}, {{bet.hour}}</span><br>
+            <span class="bet-hash">{{bet.hash}}</span>
+          </div>
+          <div class="bet-amount-info">
+            <span><b>R$ {{bet.betAmount}} | R$ {{bet.jackpot}}</b></span><br>
+            <span>Jogos: {{bet.quantityBets}} | Acertos: {{bet.hits}}</span><br>
+            <span><b [ngStyle]="{'color': getColorBetStatus(bet.status)}">{{bet.situation}}</b></span>
+          </div>
+
+        </button>
+      </ion-list>
+    </div>
+  </ion-content>

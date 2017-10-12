@@ -19,30 +19,45 @@ export class HomePage {
   user: any;
   championships: Array<any> = [];
   util: any = Util;
+  loading: Boolean;
 
   constructor(
     public navCtrl: NavController,
     public events: Events,
     public loginService: LoginService,
     public betService: BetService,
-    public gameService: GameService) {
+    public gameService: GameService) { }
 
-    loginService.getLoggedUser().then((user) => {
+  ngOnInit() {
+    this.loading = true;
+    this.loginService.getLoggedUser().then((user) => {
       this.user = user;
-      events.publish('user:loaded');
+      this.events.publish('user:loaded');
     });
 
-    betService.getCurrentBet().then((bet) => {
+    this.betService.getCurrentBet().then((bet) => {
       this.bet = bet;
     });
 
-    events.subscribe('user:loaded', () => {
+    this.events.subscribe('user:loaded', () => {
       this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
         .then((championships) => {
-          this.championships = championships;
+          if(championships && championships.length > 0) {
+            this.championships = championships;
+            this.toggleGroup(this.championships[0]);
+          }
+          this.loading = false;
         }, error => {
           console.log(error);
         });
     });
+  }
+
+  toggleGroup(group) {
+    group.show = !group.show;
+  }
+
+  isGroupShown(group) {
+    return group.show;
   }
 }
