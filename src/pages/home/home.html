@@ -9,8 +9,14 @@
 
 <ion-content>
 
-  <ion-list>
-    <div class="championship-list" *ngFor="let championship of championships">
+  <div class="loader" [hidden]="!loading">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list [hidden]="loading">
+    <div
+      class="championship-list"
+      *ngFor="let championship of championships">
 
       <ion-item
         class="championship-item"

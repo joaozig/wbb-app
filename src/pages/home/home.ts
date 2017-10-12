@@ -19,6 +19,7 @@ export class HomePage {
   user: any;
   championships: Array<any> = [];
   util: any = Util;
+  loading: Boolean;
 
   constructor(
     public navCtrl: NavController,
@@ -28,10 +29,9 @@ export class HomePage {
     public gameService: GameService) { }
 
   ngOnInit() {
-    console.log('entrou aqui no constructor');
+    this.loading = true;
     this.loginService.getLoggedUser().then((user) => {
       this.user = user;
-      console.log('entrou aqui');
       this.events.publish('user:loaded');
     });
 
@@ -42,8 +42,11 @@ export class HomePage {
     this.events.subscribe('user:loaded', () => {
       this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
         .then((championships) => {
-          this.championships = championships;
-          this.toggleGroup(this.championships[0]);
+          if(championships && championships.length > 0) {
+            this.championships = championships;
+            this.toggleGroup(this.championships[0]);
+          }
+          this.loading = false;
         }, error => {
           console.log(error);
         });
