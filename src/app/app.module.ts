@@ -11,6 +11,7 @@ import { LoginPage } from '../pages/login/login';
 import { HomePage } from '../pages/home/home';
 import { BetPage } from '../pages/bet/bet';
 import { CurrentBetPage } from '../pages/current-bet/current-bet';
+import { EditBetPage } from '../pages/current-bet/current-bet';
 import { ResultsPage } from '../pages/results/results';
 import { ManagerPage } from '../pages/manager/manager';
 import { FinancialPage } from '../pages/financial/financial';
@@ -26,6 +27,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     BetPage,
     CurrentBetPage,
+    EditBetPage,
     ResultsPage,
     ManagerPage,
     FinancialPage,
@@ -43,6 +45,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     HomePage,
     BetPage,
     CurrentBetPage,
+    EditBetPage,
     ResultsPage,
     ManagerPage,
     FinancialPage,

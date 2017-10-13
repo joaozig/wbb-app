@@ -7,7 +7,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <div [hidden]="bet">
     <ion-list>
       <ion-item>
@@ -19,7 +19,7 @@
         <ion-input type="number" [(ngModel)]="player.betAmount"></ion-input>
       </ion-item>
     </ion-list>
-    <div style="margin-top: 35px;">
+    <div style="margin-top: 35px;" padding>
       <button ion-button color="primary" block (click)="createBet()">
         Adicionar Aposta
       </button>

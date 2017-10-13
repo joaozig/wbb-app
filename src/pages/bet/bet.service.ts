@@ -24,13 +24,29 @@ export class BetService {
           playerName: playerName,
           betAmount: betAmount
         });
-        this.storage.set(BetService.betKey, bet);
+        this._saveBet(bet);
         resolve(bet);
       } else {
         reject(validation.message);
       }
     });
   }
+
+	editBet(playerName, betAmount): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let validation = this._validateBet(playerName, betAmount);
+      if(validation.valid) {
+        this.getCurrentBet().then((bet) => {
+          bet.playerName = playerName;
+          bet.betAmount = betAmount;
+          this._saveBet(bet);
+          resolve(bet);
+        });
+      } else {
+        reject(validation.message);
+      }
+    });
+	}
 
   getCurrentBet(): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -70,5 +86,9 @@ export class BetService {
 		}
 
 		return validation;
+  }
+
+  private _saveBet(bet) {
+    this.storage.set(BetService.betKey, bet);   
   }
 }

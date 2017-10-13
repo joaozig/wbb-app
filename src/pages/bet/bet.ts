@@ -28,6 +28,10 @@ export class BetPage {
     betService.getCurrentBet().then((bet) => {
       this.bet = bet;
     });
+
+    events.subscribe('bet:created', (bet) => {
+      this.bet = bet;
+    });
   }
 
   createBet() {
