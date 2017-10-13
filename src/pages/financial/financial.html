@@ -51,3 +51,21 @@
       </ion-list>
     </div>
   </ion-content>
+  <ion-footer [hidden]="loading">
+		<div style="float: left;margin: auto auto auto 10px;">
+			Apostas: <br> <b>{{resume?.bets}}</b><br>
+			Acertos/Erros: <br> <b>{{resume?.hits}}/{{resume?.misses}}</b>
+		</div>
+		<div>
+			Comissão: <br> <b>R$ {{util.formattedValue(resume?.commission)}}</b><br>
+			Prêmios: <br> <b>R$ {{util.formattedValue(resume?.prizes)}}</b>
+		</div>
+		<div style="float: right;margin: auto 10px auto auto;">
+      Bruto: <br>
+      <b>R$ {{util.formattedValue(resume?.grossValue)}}</b><br>
+      Líquido: <br>
+      <b [ngStyle]="{'color': getColorNetValue(resume?.netValue)}">
+        R$ {{util.formattedValue(resume?.netValue)}}
+      </b>
+    </div>
+  </ion-footer>
