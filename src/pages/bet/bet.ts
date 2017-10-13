@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, Events } from 'ionic-angular';
 
+import { Util } from '../../app/util';
+
 import { HomePage } from '../home/home';
+import { CurrentBetPage } from '../current-bet/current-bet';
 import { BetService } from './bet.service';
 
 @Component({
@@ -11,6 +14,7 @@ import { BetService } from './bet.service';
 })
 export class BetPage {
 
+  util: any;
   bet: any;
   player: any = {name: '', betAmount: ''};
 
@@ -19,6 +23,8 @@ export class BetPage {
     public alertCtrl: AlertController,
     public events: Events,
     public betService: BetService) {
+
+    this.util = Util;
     betService.getCurrentBet().then((bet) => {
       this.bet = bet;
     });
@@ -64,5 +70,9 @@ export class BetPage {
         }
       ]
     }).present();
+  }
+
+  goToCurrentBet() {
+    this.navCtrl.push(CurrentBetPage);
   }
 }
