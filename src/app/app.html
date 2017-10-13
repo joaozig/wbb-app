@@ -17,22 +17,22 @@
       <hr />
     </div>
     <ion-list>
-      <button menuClose ion-item (click)="showPage('home')">
+      <button menuClose ion-item (click)="showPage('home')" detail-none>
         <ion-icon name="football" item-start></ion-icon> Tabela Geral
       </button>
-      <button menuClose ion-item (click)="showPage('bet')">
+      <button menuClose ion-item (click)="showPage('bet')" detail-none>
         <ion-icon name="person-add" item-start></ion-icon> Adicionar Aposta
       </button>
-      <button menuClose ion-item (click)="showPage('financial')" *ngIf="user.profile == 20">
+      <button menuClose ion-item (click)="showPage('financial')" *ngIf="user.profile == 20" detail-none>
         <ion-icon name="logo-usd" item-start></ion-icon> Financeiro
       </button>
-      <button menuClose ion-item (click)="showPage('manager')" *ngIf="user.profile != 20">
+      <button menuClose ion-item (click)="showPage('manager')" *ngIf="user.profile != 20" detail-none>
         <ion-icon name="logo-usd" item-start></ion-icon> Financeiro
       </button>
-      <button menuClose ion-item (click)="showPage('results')">
+      <button menuClose ion-item (click)="showPage('results')" detail-none>
         <ion-icon name="medal" item-start></ion-icon> Resultados
       </button>
-      <button menuClose ion-item (click)="logout()">
+      <button menuClose ion-item (click)="logout()" detail-none>
         <ion-icon name="exit" item-start></ion-icon> Sair
       </button>
     </ion-list>
