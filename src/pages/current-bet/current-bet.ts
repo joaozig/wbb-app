@@ -41,6 +41,28 @@ export class CurrentBetPage {
   editBet() {
     this.modalCtrl.create(EditBetPage, {bet: this.bet}).present();
   }
+
+  removeBet() {
+    this.alertCtrl.create({
+      title: 'Excluir Aposta',
+      message: 'Deseja realmente excluir a aposta?',
+      buttons: [
+        {
+          text: 'Cancelar'
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.betService.removeBet().then(() => {
+              this.bet = null;
+              this.events.publish('bet:removed');
+              this.navCtrl.pop();
+            });
+          }
+        }
+      ]
+    }).present();
+  }
 }
 
 @Component({

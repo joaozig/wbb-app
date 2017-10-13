@@ -32,6 +32,10 @@ export class BetPage {
     events.subscribe('bet:created', (bet) => {
       this.bet = bet;
     });
+
+    events.subscribe('bet:removed', () => {
+      this.bet = null;
+    });
   }
 
   createBet() {
