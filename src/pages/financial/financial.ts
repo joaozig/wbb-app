@@ -12,6 +12,7 @@ import { FinancialService } from './financial.service';
 })
 export class FinancialPage {
 
+  util: any = Util;
   sellers: any;
   resume: any;
   initialDate: any;
