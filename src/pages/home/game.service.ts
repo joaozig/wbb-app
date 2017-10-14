@@ -26,4 +26,18 @@ export class GameService {
       });
     });
   }
+
+  getGame(gameId, sportId, countryId, groupId): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = API_URL + '/includes/inc.games.php';
+      url += '?gameId=' + gameId + '&sportId=' + sportId;
+      url += '&countryId=' + countryId+"groupId="+groupId;
+
+      this.http.get(url).map(res => res.json()).subscribe(response => {
+        resolve(response.game[0]);
+      }, (error) => {
+        reject('Não foi possível recuperar os palpites.');
+      });
+    });
+  }
 }
