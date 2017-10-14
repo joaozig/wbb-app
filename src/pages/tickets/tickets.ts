@@ -6,11 +6,12 @@ import { Util } from '../../app/util';
 import { BetPage } from '../bet/bet';
 
 import { BetService } from '../bet/bet.service';
+import { GameService } from '../home/game.service';
 
 @Component({
   selector: 'page-tickets',
   templateUrl: 'tickets.html',
-  providers: [BetService]
+  providers: [BetService, GameService]
 })
 export class TicketsPage {
 
@@ -18,7 +19,7 @@ export class TicketsPage {
   bet: any;
   user: any;
   game: any;
-  loading: Boolean;
+  loading: Boolean = true;
   shownGroup: any;
 
   constructor(
@@ -26,11 +27,29 @@ export class TicketsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public events: Events,
-    public betService: BetService) {
+    public betService: BetService,
+    public gameService: GameService) {
 
     this.bet = navParams.get('bet');
-    this.user = navParams.get('user');
-    this.game = navParams.get('game');
+    let user = navParams.get('user');
+    let game = navParams.get('game');
+    let sportId = navParams.get('sportId');
+    let countryId = navParams.get('countryId');
+
+    this.gameService.getGame(game.id, sportId, countryId, user.id_group)
+      .then((game) => {
+        this.loading = false;
+				this.game = game;
+				this.toggleGroup(game.ticketType[0]);
+			},(errorMessage) => {
+        this.loading = false;
+        this.alertCtrl.create({
+          title: 'Algo falhou :(',
+          message: errorMessage,
+          buttons: ['OK']
+        }).present();
+			}
+		);
   }
 
   toggleGroup(group) {

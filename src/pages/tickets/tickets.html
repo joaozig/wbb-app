@@ -5,11 +5,11 @@
     </button>
     <ion-title>
       <div class="game-detail-nav-title">
-          <img [src]="{{game.teamA.img}}" class="game-detail-nav-title-left-team-img">
+          <img [src]="game?.teamA.img" class="game-detail-nav-title-left-team-img">
           <span class="game-detail-nav-title-text">
-            {{game.teamA.name}} x {{game.teamB.name}}
+            {{game?.teamA.name}} x {{game?.teamB.name}}
           </span>
-          <img [src]="{{game.teamB.img}}" class="game-detail-nav-title-right-team-img">
+          <img [src]="game?.teamB.img" class="game-detail-nav-title-right-team-img">
       </div>
     </ion-title>
   </ion-navbar>
@@ -17,7 +17,7 @@
 
 <ion-content>
   <ion-list>
-    <div ng-repeat="let ticketType of game.ticketType">
+    <div *ngFor="let ticketType of game?.ticketType">
       <ion-item-divider color="stable"
         [ngClass]="{'active' : isGroupShown(ticketType)}"
         (click)="toggleGroup(ticketType)">
