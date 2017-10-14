@@ -30,7 +30,7 @@ export class Bet {
 	jackpot() {
 		var amount = 0;
 
-		this.tickets.forEach(function(ticket) {
+		this.tickets.forEach((ticket) => {
 			if (amount == 0) {
 				amount = this.betAmount;
 			}
