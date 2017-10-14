@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { NavController, Events } from 'ionic-angular';
+import { NavController, AlertController, Events } from 'ionic-angular';
 
 import { LoginService } from '../login/login.service';
 import { BetService } from '../bet/bet.service';
 import { GameService } from './game.service';
+
+import { TicketsPage } from '../tickets/tickets';
 
 import { CONFIG } from '../../app/constants';
 import { Util } from '../../app/util';
@@ -22,6 +24,7 @@ export class HomePage {
   loading: Boolean;
 
   constructor(
+    public alertCtrl: AlertController,
     public navCtrl: NavController,
     public events: Events,
     public loginService: LoginService,
@@ -48,7 +51,11 @@ export class HomePage {
           }
           this.loading = false;
         }, error => {
-          console.log(error);
+          this.alertCtrl.create({
+            title: 'Algo falhou :(',
+            message: error,
+            buttons: ['OK']
+          }).present();
         });
     });
   }
@@ -59,5 +66,16 @@ export class HomePage {
 
   isGroupShown(group) {
     return group.show;
+  }
+
+  seeMoreTickets(game, championship) {
+    this.navCtrl.push(TicketsPage, {
+      bet: this.bet,
+      user: this.user,
+      game: game,
+      gameId: game.id,
+      sportId: CONFIG.sportId,
+      countryId: championship.country.id
+    });
   }
 }
