@@ -62,6 +62,38 @@ export class BetService {
     return this.storage.remove(BetService.betKey);
   }
 
+	addTicket(ticket): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getCurrentBet().then((bet) => {
+        if(!this._validateTicketDate(ticket)){
+          reject('Tempo esgotado para apostas nesse jogo.');
+        } else if(!this._validateUniqueTicket(bet, ticket)) {
+          reject('Você já escolheu um palpite para esse jogo.');
+        } else {
+          var newTicket = {
+            id: ticket.id,
+            name: ticket.name,
+            tax: ticket.tax,
+            gameId: ticket.ticketType.game.id,
+            teamAname: ticket.ticketType.game.teamA.name,
+            teamAimg: ticket.ticketType.game.teamA.img,
+            teamBname: ticket.ticketType.game.teamB.name,
+            teamBimg: ticket.ticketType.game.teamB.img,
+            championship: ticket.ticketType.game.championship.name,
+            gameDate: ticket.ticketType.game.date,
+            gameTime: ticket.ticketType.game.time,
+            ticketType: ticket.ticketType.name
+          };
+          bet.tickets.push(newTicket);
+          this._saveBet(bet);
+          resolve(bet);
+        }
+      }, (error) => {
+        reject('Aposta não encontrada.');
+      });
+    });
+	}
+
   /** Private Methods  **/
 
   private _validateBet(playerName, betAmount) {
@@ -91,4 +123,35 @@ export class BetService {
   private _saveBet(bet) {
     this.storage.set(BetService.betKey, bet);   
   }
+
+  private _validateTicketDate(ticket) {
+		var game = ticket.ticketType.game;
+		let now: any = new Date();
+		var d = game.date.split("/");
+		var date = d[2]+'-'+d[1]+'-'+d[0];
+		let finalDate: any = new Date(date + " " + game.time);
+		var diffMs = (finalDate - now); // milliseconds between now & Christmas
+		var diffDays = Math.round(diffMs / 86400000); // days
+		var diffHrs = Math.round((diffMs % 86400000) / 3600000); // hours
+		var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+
+		// can't add new ticket when left 5 minutes to the start of the game
+		if(diffDays == 0 && diffHrs == 0 && diffMins <= 5) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	private _validateUniqueTicket(bet, ticket) {
+		var validate = true;
+
+		bet.tickets.forEach(function(currentTicket) {
+			if(currentTicket.gameId == ticket.ticketType.game.id) {
+				validate = false;
+			}
+		});
+
+		return validate;
+	}
 }
