@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <div class="game-detail-nav-title">
+          <img [src]="{{game.teamA.img}}" class="game-detail-nav-title-left-team-img">
+          <span class="game-detail-nav-title-text">
+            {{game.teamA.name}} x {{game.teamB.name}}
+          </span>
+          <img [src]="{{game.teamB.img}}" class="game-detail-nav-title-right-team-img">
+      </div>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <div ng-repeat="let ticketType of game.ticketType">
+      <ion-item-divider color="stable"
+        [ngClass]="{'active' : isGroupShown(ticketType)}"
+        (click)="toggleGroup(ticketType)">
+
+        <ion-icon name="add" [hidden]="isGroupShown(ticketType)"></ion-icon>
+        <ion-icon name="remove" [hidden]="!isGroupShown(ticketType)"></ion-icon>
+        {{ticketType.name}}
+      </ion-item-divider>
+
+      <ion-item 
+        [hidden]="!isGroupShown(ticketType)"
+        *ngFor="let ticket of ticketType.tickets">
+
+        {{ticket.name}}
+        <button  ion-button small item-end (click)="addTicketToBet(ticket, ticketType)">
+          {{util.formattedTaxValue(ticket.tax)}}
+        </button>
+      </ion-item>
+    </div>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <bet-footer [bet]="bet"></bet-footer>
+</ion-footer>
