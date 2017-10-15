@@ -118,6 +118,29 @@ export class BetService {
     });
 	}
 
+  removeTicket(ticketId): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      this.getCurrentBet().then((bet) => {
+        let index = null;
+
+        bet.tickets.forEach((ticket, i) => {
+          if(ticket.id == ticketId) {
+            index = i;
+          }
+        });
+    
+        if (index !== null) {
+          bet.tickets.splice(index, 1);
+          this._saveBet(bet);
+          resolve(bet);
+        } else {
+          reject();
+        }
+      });
+    });
+  }
+
 	getTicketByGameFromBet(bet, game): any {
     var ticket = null;
 
