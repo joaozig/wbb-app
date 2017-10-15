@@ -104,16 +104,12 @@ export class MyApp {
         this.setRootPage(HomePage); break;
       case 'bet':
         this.setRootPage(BetPage); break;
-      case 'results':
-        this.setRootPage(ResultsPage); break;
       case 'manager':
         this.setRootPage(ManagerPage); break;
       case 'financial':
-        this.nav.setRoot(FinancialPage, {
-          seller: this.user.id,
-          group: 0
-        });
-        break;
+        this.setRootPage(FinancialPage); break;
+      case 'results':
+        this.setRootPage(ResultsPage); break;
     }
   }
 

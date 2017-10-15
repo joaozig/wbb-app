@@ -6,11 +6,12 @@ import { Util } from '../../app/util';
 import { FinishedBetPage } from '../finished-bet/finished-bet';
 
 import { FinancialService } from './financial.service';
+import { LoginService } from '../login/login.service';
 
 @Component({
   selector: 'page-financial',
   templateUrl: 'financial.html',
-  providers: [FinancialService]
+  providers: [FinancialService, LoginService]
 })
 export class FinancialPage {
 
@@ -24,20 +25,30 @@ export class FinancialPage {
   shownGroup: any = [true, true, true];
   sellerId: any;
   groupId: any;
-  loading: Boolean;
+  loading: Boolean = true;
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
     public events: Events,
-    public financialService: FinancialService) {
+    public financialService: FinancialService,
+    public loginService: LoginService) {
 
-    this.sellerId = navParams.get('seller');
-    this.groupId = navParams.get('group');
+    let groupId = navParams.get('group');
     let initialDate = navParams.get('initialDate');
 
-    this.currentDate(initialDate);
+    if (groupId) {
+      this.sellerId = 0
+      this.groupId = groupId;
+      this.currentDate(initialDate);
+    } else {
+      this.loginService.getLoggedUser().then((user) => {
+        this.sellerId = user.id;
+        this.groupId = 0;
+        this.currentDate(initialDate);
+      });
+    }
 
     events.subscribe('bet:cancelled', () => {
       this.loadData();
