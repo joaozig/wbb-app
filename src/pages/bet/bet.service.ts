@@ -74,6 +74,18 @@ export class BetService {
     return this.storage.remove(BetService.betKey);
   }
 
+  cancelBet(hash): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = API_URL + '/includes/inc.cancelbet.php?hash=' + hash;
+
+      this.http.get(url).map(res => res.json()).subscribe(response => {
+        resolve(response);
+      }, (error) => {
+        reject('Não foi possível recuperar a aposta.');
+      });
+    });
+  }
+
 	addTicket(ticket): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getCurrentBet().then((bet) => {

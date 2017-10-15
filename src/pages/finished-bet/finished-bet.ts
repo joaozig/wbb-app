@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, NavParams } from 'ionic-angular';
+import { NavController, AlertController, NavParams, Events } from 'ionic-angular';
 
 import { Util } from '../../app/util';
 
@@ -20,6 +20,7 @@ export class FinishedBetPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
+    public events: Events,
     public betService: BetService) {
 
     this.bet = navParams.get('bet');
@@ -35,6 +36,41 @@ export class FinishedBetPage {
       }).present();
     });
   }
+
+	cancelBet() {
+    this.alertCtrl.create({
+      title: 'Excluir Aposta',
+      message: 'Você deseja realmente cancelar a aposta?',
+      buttons: [
+        {
+          text: 'Cancelar'
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.betService.cancelBet(this.bet.hash).then((data) => {
+              if(data.user.success) {
+                this.events.publish('bet:cancelled');
+                this.navCtrl.pop();
+              } else {
+                this.alertCtrl.create({
+                  title: 'Algo falhou :(',
+                  message: data.user.message,
+                  buttons: ['OK']
+                }).present();
+              }
+            }, (errorMessage) => {
+              this.alertCtrl.create({
+                title: 'Algo falhou :(',
+                message: errorMessage,
+                buttons: ['OK']
+              }).present();
+            });
+          }
+        }
+      ]
+    }).present();
+	}
 
   getColorStatus(status) {
 		if(status.toLowerCase() == 'errou'){

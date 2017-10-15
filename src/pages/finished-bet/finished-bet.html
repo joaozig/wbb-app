@@ -8,8 +8,8 @@
 </ion-header>
 
 <ion-content>
-    <div class="spinner" [hidden]="!loading">
-      <ion-spinner></ion-spinner>  
+    <div class="loader" [hidden]="!loading">
+      <ion-spinner></ion-spinner>
     </div>
 
     <div [hidden]="loading">
@@ -45,7 +45,7 @@
             <button ion-button block color="dark" (click)="printBet()">Imprimir</button>
           </ion-col>
           <ion-col col-6>
-            <button ion-button block color="danger" (click)="ctrl.cancelBet()">Cancelar Aposta</button>
+            <button ion-button block color="danger" (click)="cancelBet()">Cancelar Aposta</button>
           </ion-col>
         </ion-row>
       </ion-grid>
