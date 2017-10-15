@@ -1,0 +1,27 @@
+page-tickets {
+  $game-detail-nav-title-team-img-size: 20px;
+  $game-detail-nav-title-team-img-margin-top: 15px;
+
+  .game-detail-nav-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+  }
+  
+  .game-detail-nav-title-left-team-img {
+    width: $game-detail-nav-title-team-img-size;
+    height: $game-detail-nav-title-team-img-size;
+  }
+  
+  .game-detail-nav-title-right-team-img {
+    width: $game-detail-nav-title-team-img-size;
+    height: $game-detail-nav-title-team-img-size;
+  }
+  
+  .game-detail-nav-title-text {
+    margin-right: 10px;
+    margin-left: 10px;
+    font-size: 14px;
+  }
+}

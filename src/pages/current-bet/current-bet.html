@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Aposta Ativa</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <strong>Aposta Ativa</strong>
+    </ion-card-header>
+    <ion-card-content>
+      <div>
+        <strong>Apostador:</strong> {{bet?.playerName}}
+      </div>
+      <div>
+        <strong>Aposta:</strong> R$ {{util?.formattedValue(bet?.betAmount)}}
+      </div>
+      <div>
+        <strong>Prêmio:</strong> R$ {{util?.formattedValue(bet?.jackpot())}}
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-list>
+    <ion-item-divider color="stable">
+      Palpites: {{bet?.tickets.length}}
+    </ion-item-divider>
+
+    <ion-item-sliding *ngFor="let ticket of bet?.tickets">
+      <ion-item>
+        <div class="game-row">
+          <img [src]="ticket.teamAimg" class="left-team-img">
+          <div>
+            {{ticket.teamAname}} x {{ticket.teamBname}}
+            <div class="ticket-game-detail">
+              {{ticket.championship}} - {{ticket.gameDate}} - {{ticket.gameTime}}
+            </div>
+          </div>
+          <img [src]="ticket.teamBimg" class="right-team-img">
+        </div>
+        <div class="game-row">
+          <span class="ticket-game-detail">
+            <strong>{{ticket.ticketType}}</strong>
+            <br>
+            {{ticket.name}} ({{util?.formattedTaxValue(ticket.tax)}})
+          </span>
+        </div>
+      </ion-item>
+      <ion-item-options>
+        <button ion-button color="danger"
+          (click)="removeTicket(ticket.id)">
+          
+          Remover
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+
+  <div class="row">
+    <div class="col">
+      <button ion-button block [hidden]="!showEndedBetButton" (click)="finishBet()">
+        Finalizar aposta
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button ion-button block color="dark" (click)="editBet()">
+        Corrigir aposta
+      </button>
+    </div>
+    <div class="col">
+      <button ion-button block outline color="danger" (click)="removeBet()">
+        Excluir aposta
+      </button>
+    </div>
+  </div>
+</ion-content>

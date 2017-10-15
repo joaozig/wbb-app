@@ -1,4 +1,4 @@
-page-bet {
+page-current-bet {
   ion-card-header {
     background-color: #00A087;
     font-size: 20px !important;
@@ -19,5 +19,9 @@ page-bet {
     button:first-child {
       margin-bottom: 10px;
     }
+  }
+
+  ion-item-divider {
+    font-size: 16px !important;
   }
 }

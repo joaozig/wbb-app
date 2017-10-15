@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { NavController, Events } from 'ionic-angular';
+import { NavController, AlertController, Events } from 'ionic-angular';
 
 import { LoginService } from '../login/login.service';
 import { BetService } from '../bet/bet.service';
 import { GameService } from './game.service';
+
+import { BetPage } from '../bet/bet';
+import { TicketsPage } from '../tickets/tickets';
 
 import { CONFIG } from '../../app/constants';
 import { Util } from '../../app/util';
@@ -22,6 +25,7 @@ export class HomePage {
   loading: Boolean;
 
   constructor(
+    public alertCtrl: AlertController,
     public navCtrl: NavController,
     public events: Events,
     public loginService: LoginService,
@@ -39,6 +43,11 @@ export class HomePage {
       this.bet = bet;
     });
 
+    this.events.subscribe('bet:changed', (bet) => {
+      this.bet = bet;
+      this.updatePageData();
+    });
+
     this.events.subscribe('user:loaded', () => {
       this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
         .then((championships) => {
@@ -46,9 +55,14 @@ export class HomePage {
             this.championships = championships;
             this.toggleGroup(this.championships[0]);
           }
+          this.updatePageData();
           this.loading = false;
         }, error => {
-          console.log(error);
+          this.alertCtrl.create({
+            title: 'Algo falhou :(',
+            message: error,
+            buttons: ['OK']
+          }).present();
         });
     });
   }
@@ -60,4 +74,58 @@ export class HomePage {
   isGroupShown(group) {
     return group.show;
   }
+
+  seeMoreTickets(game, championship) {
+    this.navCtrl.push(TicketsPage, {
+      bet: this.bet,
+      user: this.user,
+      game: game,
+      gameId: game.id,
+      sportId: CONFIG.sportId,
+      countryId: championship.country.id
+    });
+  }
+
+  addTicketToBet(ticket, game, championship, gameIndex, championshipIndex) {
+    if (!this.bet) {
+      this.navCtrl.push(BetPage);
+    } else {
+      game.championship = JSON.parse(JSON.stringify(championship));
+      ticket.ticketType = {name: game.ticketType[0].name};
+      ticket.ticketType.game = JSON.parse(JSON.stringify(game));
+      this.betService.addTicket(ticket).then((bet) => {
+        this.championships[championshipIndex].games[gameIndex].alreadyAdded = true;
+        this.championships[championshipIndex].games[gameIndex].currentTicket = ticket;
+        this.events.publish('bet:changed', bet);
+      }, (errorMessage) => {
+        this.alertCtrl.create({
+          title: 'Algo falhou :(',
+          message: errorMessage,
+          buttons: ['OK']
+        }).present();
+      });
+    }
+  }
+
+  updatePageData() {
+    let championships = this.championships;
+		if(championships) {
+			championships.forEach((championship, index) => {
+				championship.games = championship.games.map((game) => {
+          var ticket = this.betService.getTicketByGameFromBet(this.bet, game);
+					if (ticket) {
+            ticket.ticketType = {name: game.ticketType[0].name};
+            ticket.ticketType.game = JSON.parse(JSON.stringify(game));
+						game.currentTicket = ticket;
+						game.alreadyAdded = true;
+					} else {
+						game.alreadyAdded = false;
+					}
+
+					return game;
+        });
+				this.championships[index] = championship;
+			});
+		}
+	}
 }

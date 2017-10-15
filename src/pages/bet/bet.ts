@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, Events } from 'ionic-angular';
 
+import { Util } from '../../app/util';
+
 import { HomePage } from '../home/home';
+import { CurrentBetPage } from '../current-bet/current-bet';
 import { BetService } from './bet.service';
 
 @Component({
@@ -11,6 +14,7 @@ import { BetService } from './bet.service';
 })
 export class BetPage {
 
+  util: any;
   bet: any;
   player: any = {name: '', betAmount: ''};
 
@@ -19,7 +23,13 @@ export class BetPage {
     public alertCtrl: AlertController,
     public events: Events,
     public betService: BetService) {
+
+    this.util = Util;
     betService.getCurrentBet().then((bet) => {
+      this.bet = bet;
+    });
+
+    events.subscribe('bet:changed', (bet) => {
       this.bet = bet;
     });
   }
@@ -31,7 +41,7 @@ export class BetPage {
         if(this.navCtrl.length() == 1) {
           this.events.publish('root:change', HomePage);
         } else {
-          this.events.publish('bet:created', bet);
+          this.events.publish('bet:changed', bet);
           this.navCtrl.pop();
         }
       }, (errorMessage) => {
@@ -58,11 +68,15 @@ export class BetPage {
               this.bet = null;
               this.player.name = '';
               this.player.betAmount = '';
-              this.events.publish('bet:removed');
+              this.events.publish('bet:changed', null);
             });
           }
         }
       ]
     }).present();
+  }
+
+  goToCurrentBet() {
+    this.navCtrl.push(CurrentBetPage);
   }
 }
