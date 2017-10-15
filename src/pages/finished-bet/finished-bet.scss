@@ -1,0 +1,32 @@
+page-finished-bet {
+  ion-card-header {
+    background-color: #00A087;
+    font-size: 18px !important;
+    color: #fff !important;
+    padding: 8px 16px !important;
+    font-weight: 500;
+  }
+
+  ion-card-content {
+    padding-top: 10px !important;
+    color: #444444 !important;
+    line-height: 1.5;
+    font-size: 16px !important;
+  }
+
+  ion-item-divider {
+    font-size: 16px !important;
+  }
+
+  .bet-ticket-game-details {
+    text-align: center;
+  }
+
+  .ticket-game-detail {
+    text-align: center;
+    color: #555;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.7;
+  }
+}

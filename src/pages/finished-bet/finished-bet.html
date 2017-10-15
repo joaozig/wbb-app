@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Resumo da Aposta</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div class="spinner" [hidden]="!loading">
+      <ion-spinner></ion-spinner>  
+    </div>
+
+    <div [hidden]="loading">
+      <ion-card>
+        <ion-card-header>
+          Dados da Aposta
+        </ion-card-header>
+        <ion-card-content>
+          <div>
+            <strong>Cliente:</strong> {{bet?.playerName}}
+          </div>
+          <div>
+            <strong>Vendedor:</strong> {{bet?.seller}}
+          </div>
+          <div>
+            <strong>Data/Hora:</strong> {{bet?.date}}
+          </div>
+          <div>
+            <strong>Código:</strong> {{bet?.hash}}
+          </div>
+          <div>
+            <strong>Valor da Aposta:</strong> R$ {{util?.formattedValue(bet?.betAmount)}}
+          </div>
+          <div>
+            <strong>Prêmio Possível:</strong> R$ {{util?.formattedValue(bet?.jackpot)}}
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-grid>
+        <ion-row>
+          <ion-col col-6>
+            <button ion-button block color="dark" (click)="printBet()">Imprimir</button>
+          </ion-col>
+          <ion-col col-6>
+            <button ion-button block color="danger" (click)="ctrl.cancelBet()">Cancelar Aposta</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-list>
+        <ion-item-divider color="stable">
+          Palpites: {{bet?.tickets?.length}}
+        </ion-item-divider>
+        <ion-item *ngFor="let ticket of bet?.tickets">
+          <div class="game-row">
+            <img [src]="ticket.teamAimg" class="left-team-img">
+            <div class="bet-ticket-game-details">
+              <b style="text-transform:capitalize;" [ngStyle]="{'color': getColorStatus(ticket.status)}">
+                {{ticket.status}}
+              </b><br />
+              {{ticket.teamAname}} x {{ticket.teamBname}}
+              <div class="ticket-game-detail">
+                {{ticket.championship}} - {{ticket.gameDate}}
+              </div>
+            </div>
+            <img [src]="ticket.teamBimg" class="right-team-img">
+          </div>
+          <div class="game-row">
+            <span class="ticket-game-detail">
+              <strong>{{ticket.ticketType}}</strong>
+              <br>
+              {{ticket.name}} ({{util?.formattedTaxValue(ticket.tax)}})
+            </span>
+          </div>
+        </ion-item>
+      </ion-list>
+    </div>
+</ion-content>
