@@ -3,6 +3,8 @@ import { NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { Util } from '../../app/util';
 
+import { FinishedBetPage } from '../finished-bet/finished-bet';
+
 import { FinancialService } from './financial.service';
 
 @Component({
@@ -45,6 +47,10 @@ export class FinancialPage {
     }
 
     this.setDates(date);
+  }
+
+  betResume(bet) {
+    this.navCtrl.push(FinishedBetPage, {bet: bet});
   }
 
   prevDate() {
