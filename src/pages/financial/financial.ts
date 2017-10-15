@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import { NavController, NavParams, AlertController, Events } from 'ionic-angular';
 
 import { Util } from '../../app/util';
+
+import { FinishedBetPage } from '../finished-bet/finished-bet';
 
 import { FinancialService } from './financial.service';
 
@@ -28,6 +30,7 @@ export class FinancialPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public alertCtrl: AlertController,
+    public events: Events,
     public financialService: FinancialService) {
 
     this.sellerId = navParams.get('seller');
@@ -35,6 +38,10 @@ export class FinancialPage {
     let initialDate = navParams.get('initialDate');
 
     this.currentDate(initialDate);
+
+    events.subscribe('bet:cancelled', () => {
+      this.loadData();
+    });
   }
 
   currentDate(initialDate=null) {
@@ -47,6 +54,10 @@ export class FinancialPage {
     this.setDates(date);
   }
 
+  betResume(bet) {
+    this.navCtrl.push(FinishedBetPage, {bet: bet});
+  }
+
   prevDate() {
   	this.setDates(this.initialDate.setDate(this.initialDate.getDate() - 2));
   }
@@ -56,7 +67,6 @@ export class FinancialPage {
   }
 
   setDates(date) {
-    this.loading = true;
     this.initialDate = Util.getMonday(date);
     this.finalDate = Util.getSunday(date);
 
@@ -67,6 +77,7 @@ export class FinancialPage {
   }
 
   loadData() {
+    this.loading = true;
 		var initialDate = Util.formatFilterDate(this.initialDate);
 		var finalDate = Util.formatFilterDate(this.finalDate);
     this.financialService.getBets(initialDate, finalDate, this.sellerId, this.groupId)

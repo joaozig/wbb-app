@@ -63,4 +63,30 @@ export class CurrentBetPage {
       ]
     }).present();
   }
+
+  removeTicket(ticketId) {
+    this.alertCtrl.create({
+      title: 'Remover Palpite',
+      message: 'Você deseja realmente remover o palpite da aposta?',
+      buttons: [
+        {
+          text: 'Cancelar'
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.betService.removeTicket(ticketId).then((bet) => {
+              this.events.publish('bet:changed', bet);
+            }, () => {
+              this.alertCtrl.create({
+                title: 'Algo falhou :(',
+                message: 'Não foi possível remover o palpite da aposta',
+                buttons: ['OK']
+              }).present();
+            });
+          }
+        }
+      ]
+    }).present();
+  }
 }

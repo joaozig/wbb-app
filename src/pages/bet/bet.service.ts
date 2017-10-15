@@ -58,8 +58,32 @@ export class BetService {
     });
   }
 
+	getFinishedBet(hash): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = API_URL + '/includes/inc.getbets.php?hash=' + hash;
+
+      this.http.get(url).map(res => res.json()).subscribe(response => {
+        resolve(response);
+      }, (error) => {
+        reject('Não foi possível recuperar a aposta.');
+      });
+    });
+  }
+
   removeBet(): Promise<any> {
     return this.storage.remove(BetService.betKey);
+  }
+
+  cancelBet(hash): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = API_URL + '/includes/inc.cancelbet.php?hash=' + hash;
+
+      this.http.get(url).map(res => res.json()).subscribe(response => {
+        resolve(response);
+      }, (error) => {
+        reject('Não foi possível recuperar a aposta.');
+      });
+    });
   }
 
 	addTicket(ticket): Promise<any> {
@@ -93,6 +117,29 @@ export class BetService {
       });
     });
 	}
+
+  removeTicket(ticketId): Promise<any> {
+    return new Promise((resolve, reject) => {
+
+      this.getCurrentBet().then((bet) => {
+        let index = null;
+
+        bet.tickets.forEach((ticket, i) => {
+          if(ticket.id == ticketId) {
+            index = i;
+          }
+        });
+    
+        if (index !== null) {
+          bet.tickets.splice(index, 1);
+          this._saveBet(bet);
+          resolve(bet);
+        } else {
+          reject();
+        }
+      });
+    });
+  }
 
 	getTicketByGameFromBet(bet, game): any {
     var ticket = null;

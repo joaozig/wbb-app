@@ -10,7 +10,7 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      <strong>Aposta Ativa</strong>
+      Aposta Ativa
     </ion-card-header>
     <ion-card-content>
       <div>
@@ -24,6 +24,28 @@
       </div>
     </ion-card-content>
   </ion-card>
+
+  <ion-grid>
+    <ion-row [hidden]="!bet || bet?.tickets.length < 2">
+      <ion-col col-12>
+        <button ion-button block (click)="finishBet()">
+          Finalizar aposta
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button ion-button block color="dark" (click)="editBet()">
+          Corrigir aposta
+        </button>
+      </ion-col>
+      <ion-col col-6>
+        <button ion-button block outline color="danger" (click)="removeBet()">
+          Excluir aposta
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
   <ion-list>
     <ion-item-divider color="stable">
@@ -44,7 +66,7 @@
         </div>
         <div class="game-row">
           <span class="ticket-game-detail">
-            <strong>{{ticket.ticketType}}</strong>
+            <strong>{{ticket.ticketType.name}}</strong>
             <br>
             {{ticket.name}} ({{util?.formattedTaxValue(ticket.tax)}})
           </span>
@@ -59,24 +81,4 @@
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
-
-  <div class="row">
-    <div class="col">
-      <button ion-button block [hidden]="!showEndedBetButton" (click)="finishBet()">
-        Finalizar aposta
-      </button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <button ion-button block color="dark" (click)="editBet()">
-        Corrigir aposta
-      </button>
-    </div>
-    <div class="col">
-      <button ion-button block outline color="danger" (click)="removeBet()">
-        Excluir aposta
-      </button>
-    </div>
-  </div>
 </ion-content>
