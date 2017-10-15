@@ -41,7 +41,9 @@
           </div>
           <div class="game-row">
             <img [src]="game.teamA.img" class="left-team-img">
-            <button ion-button small *ngIf="game.alreadyAdded">
+            <button ion-button small
+              class="button-game-added"
+              *ngIf="game.alreadyAdded">
               {{game.currentTicket.ticketType.name.toLowerCase()}}:<br>
               {{game.currentTicket.name}} ({{util.formattedTaxValue(game.currentTicket.tax)}})
             </button>
