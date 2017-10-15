@@ -27,7 +27,7 @@
 
     <div [hidden]="loading">
       <ion-list *ngFor="let seller of sellers">
-        <ion-item-divider color="dark" class="seller-group">
+        <ion-item-divider sticky color="dark" class="seller-group">
           {{seller.situation}} {{seller.name}}
         </ion-item-divider>
         <button
