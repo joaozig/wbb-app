@@ -58,6 +58,18 @@ export class BetService {
     });
   }
 
+	getFinishedBet(hash): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = API_URL + '/includes/inc.getbets.php?hash=' + hash;
+
+      this.http.get(url).map(res => res.json()).subscribe(response => {
+        resolve(response);
+      }, (error) => {
+        reject('Não foi possível recuperar a aposta.');
+      });
+    });
+  }
+
   removeBet(): Promise<any> {
     return this.storage.remove(BetService.betKey);
   }
