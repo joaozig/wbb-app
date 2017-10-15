@@ -43,7 +43,7 @@ export class HomePage {
       this.bet = bet;
     });
 
-    this.events.subscribe('bet:created', (bet) => {
+    this.events.subscribe('bet:changed', (bet) => {
       this.bet = bet;
       this.updatePageData();
     });
@@ -96,7 +96,7 @@ export class HomePage {
       this.betService.addTicket(ticket).then((bet) => {
         this.championships[championshipIndex].games[gameIndex].alreadyAdded = true;
         this.championships[championshipIndex].games[gameIndex].currentTicket = ticket;
-        this.events.publish('bet:created', bet);
+        this.events.publish('bet:changed', bet);
       }, (errorMessage) => {
         this.alertCtrl.create({
           title: 'Algo falhou :(',

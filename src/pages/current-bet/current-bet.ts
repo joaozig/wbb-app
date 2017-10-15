@@ -33,7 +33,7 @@ export class CurrentBetPage {
       this.bet = bet;
     });
 
-    events.subscribe('bet:created', (bet) => {
+    events.subscribe('bet:changed', (bet) => {
       this.bet = bet;
     });
   }
@@ -55,7 +55,7 @@ export class CurrentBetPage {
           handler: () => {
             this.betService.removeBet().then(() => {
               this.bet = null;
-              this.events.publish('bet:removed');
+              this.events.publish('bet:changed', null);
               this.navCtrl.pop();
             });
           }

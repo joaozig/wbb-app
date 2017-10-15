@@ -29,12 +29,8 @@ export class BetPage {
       this.bet = bet;
     });
 
-    events.subscribe('bet:created', (bet) => {
+    events.subscribe('bet:changed', (bet) => {
       this.bet = bet;
-    });
-
-    events.subscribe('bet:removed', () => {
-      this.bet = null;
     });
   }
 
@@ -45,7 +41,7 @@ export class BetPage {
         if(this.navCtrl.length() == 1) {
           this.events.publish('root:change', HomePage);
         } else {
-          this.events.publish('bet:created', bet);
+          this.events.publish('bet:changed', bet);
           this.navCtrl.pop();
         }
       }, (errorMessage) => {
@@ -72,7 +68,7 @@ export class BetPage {
               this.bet = null;
               this.player.name = '';
               this.player.betAmount = '';
-              this.events.publish('bet:removed');
+              this.events.publish('bet:changed', null);
             });
           }
         }

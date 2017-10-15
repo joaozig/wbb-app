@@ -72,7 +72,7 @@ export class TicketsPage {
       ticket.ticketType.game = JSON.parse(JSON.stringify(this.game));
 
       this.betService.addTicket(ticket).then((bet) => {
-        this.events.publish('bet:created', bet);
+        this.events.publish('bet:changed', bet);
         this.navCtrl.pop();
       }, (errorMessage) => {
         this.alertCtrl.create({

@@ -37,7 +37,7 @@ export class EditBetPage {
   editBet() {
     this.betService.editBet(this.player.name, this.player.betAmount)
       .then((bet) => {
-				this.events.publish('bet:created', bet);
+				this.events.publish('bet:changed', bet);
 				this.dismiss();
 			}, (errorMessage) => {
         this.alertCtrl.create({
