@@ -94,6 +94,20 @@ export class BetService {
     });
 	}
 
+	getTicketByGameFromBet(bet, game): any {
+    var ticket = null;
+
+    if (bet) {
+      bet.tickets.forEach((t) => {
+        if (t.gameId == game.id) {
+          ticket = t;
+        }
+      });
+    }
+
+    return ticket;
+	}
+
   /** Private Methods  **/
 
   private _validateBet(playerName, betAmount) {

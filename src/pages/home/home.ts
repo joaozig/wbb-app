@@ -5,6 +5,7 @@ import { LoginService } from '../login/login.service';
 import { BetService } from '../bet/bet.service';
 import { GameService } from './game.service';
 
+import { BetPage } from '../bet/bet';
 import { TicketsPage } from '../tickets/tickets';
 
 import { CONFIG } from '../../app/constants';
@@ -42,6 +43,11 @@ export class HomePage {
       this.bet = bet;
     });
 
+    this.events.subscribe('bet:created', (bet) => {
+      this.bet = bet;
+      this.updatePageData();
+    });
+
     this.events.subscribe('user:loaded', () => {
       this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
         .then((championships) => {
@@ -49,6 +55,7 @@ export class HomePage {
             this.championships = championships;
             this.toggleGroup(this.championships[0]);
           }
+          this.updatePageData();
           this.loading = false;
         }, error => {
           this.alertCtrl.create({
@@ -78,4 +85,47 @@ export class HomePage {
       countryId: championship.country.id
     });
   }
+
+  addTicketToBet(ticket, game, championship, gameIndex, championshipIndex) {
+    if (!this.bet) {
+      this.navCtrl.push(BetPage);
+    } else {
+      game.championship = JSON.parse(JSON.stringify(championship));
+      ticket.ticketType = {name: game.ticketType[0].name};
+      ticket.ticketType.game = JSON.parse(JSON.stringify(game));
+      this.betService.addTicket(ticket).then((bet) => {
+        this.championships[championshipIndex].games[gameIndex].alreadyAdded = true;
+        this.championships[championshipIndex].games[gameIndex].currentTicket = ticket;
+        this.events.publish('bet:created', bet);
+      }, (errorMessage) => {
+        this.alertCtrl.create({
+          title: 'Algo falhou :(',
+          message: errorMessage,
+          buttons: ['OK']
+        }).present();
+      });
+    }
+  }
+
+  updatePageData() {
+    let championships = this.championships;
+		if(championships) {
+			championships.forEach((championship, index) => {
+				championship.games = championship.games.map((game) => {
+          var ticket = this.betService.getTicketByGameFromBet(this.bet, game);
+					if (ticket) {
+            ticket.ticketType = {name: game.ticketType[0].name};
+            ticket.ticketType.game = JSON.parse(JSON.stringify(game));
+						game.currentTicket = ticket;
+						game.alreadyAdded = true;
+					} else {
+						game.alreadyAdded = false;
+					}
+
+					return game;
+        });
+				this.championships[index] = championship;
+			});
+		}
+	}
 }
