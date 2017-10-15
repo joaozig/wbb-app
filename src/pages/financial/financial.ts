@@ -55,7 +55,7 @@ export class FinancialPage {
   }
 
   betResume(bet) {
-    this.navCtrl.push(FinishedBetPage, {bet: bet});
+    this.navCtrl.push(FinishedBetPage, {hash: bet.hash});
   }
 
   prevDate() {

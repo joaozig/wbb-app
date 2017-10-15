@@ -8,6 +8,7 @@ import {
 import { Util } from '../../app/util';
 
 import { EditBetPage } from './edit-bet';
+import { FinishedBetPage } from '../finished-bet/finished-bet';
 
 import { BetService } from '../bet/bet.service';
 
@@ -41,6 +42,50 @@ export class CurrentBetPage {
   editBet() {
     this.modalCtrl.create(EditBetPage, {bet: this.bet}).present();
   }
+
+	finishBet() {
+    this.alertCtrl.create({
+      title: 'Finalizar Aposta',
+      message: 'Você deseja realmente finalizar a aposta?',
+      buttons: [
+        {
+          text: 'Cancelar'
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.betService.finishBet().then((response) => {
+              if (response.success) {
+                this.betService.removeBet().then(() => {
+                  this.events.publish('bet:changed', null);
+                  this.navCtrl.push(FinishedBetPage, {hash: response.bet});
+                });
+              } else {
+                this.alertCtrl.create({
+                  title: 'Algo falhou :(',
+                  message: response.message,
+                  buttons: ['OK']
+                }).present();
+
+                if (response.tickets) {
+                  this.betService.removeInvalidTickets(response.tickets)
+                    .then((bet) => {
+                      this.events.publish('bet:changed', bet);
+                    });
+                }
+              }
+            }, (errorMessage) => {
+              this.alertCtrl.create({
+                title: 'Algo falhou :(',
+                message: 'Não foi possível finalizar a aposta',
+                buttons: ['OK']
+              }).present();
+            });
+          }
+        }
+      ]
+    }).present();
+	}
 
   removeBet() {
     this.alertCtrl.create({

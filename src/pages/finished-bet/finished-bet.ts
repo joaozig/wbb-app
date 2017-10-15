@@ -23,10 +23,9 @@ export class FinishedBetPage {
     public events: Events,
     public betService: BetService) {
 
-    this.bet = navParams.get('bet');
-    this.betService.getFinishedBet(this.bet.hash).then((bet) => {
+    let hash = navParams.get('hash');
+    this.betService.getFinishedBet(hash).then((bet) => {
       this.bet = bet;
-      console.log(this.bet);
       this.loading = false;
     }, (errorMessage) => {
       this.alertCtrl.create({

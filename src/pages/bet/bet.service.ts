@@ -6,6 +6,8 @@ import 'rxjs/add/operator/map';
 import { API_URL } from '../../app/constants';
 import { Bet } from './bet.model';
 
+import { LoginService } from '../login/login.service';
+
 @Injectable()
 export class BetService {
 
@@ -13,7 +15,10 @@ export class BetService {
   static minBetAmount = 2;
   static maxBetAmount = 150;
 
-  constructor(public http: Http, public storage: Storage) { }
+  constructor(
+    public http: Http,
+    public storage: Storage,
+    public loginService: LoginService) { }
 
   addBet(playerName, betAmount): Promise<any> {
     return new Promise((resolve, reject) => {
@@ -86,6 +91,51 @@ export class BetService {
     });
   }
 
+	finishBet(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getCurrentBet().then((bet) => {
+        if (bet) {
+          this.loginService.getLoggedUser().then((user) => {
+            bet.seller = user
+            bet.date = new Date().toLocaleString('pt');
+            var params = {
+              id: bet.id,
+              playerName: bet.playerName,
+              seller: bet.seller.id,
+              betAmount: bet.betAmount,
+              jackpot: bet.jackpot(),
+              tickets: bet.tickets,
+              date: bet.date,
+              groupId : bet.seller.id_group
+            }
+
+            params.tickets = params.tickets.map((t) => {
+              return t.id+'#'+t.tax;
+            });
+      
+            let url = API_URL + '/includes/inc.bets.php';
+            let headers = new Headers();
+            let data = 'playerName=' + params.playerName;
+            data += '&seller=' + params.seller + '&betAmount=' + params.betAmount;
+            data += '&jackpot=' + params.jackpot + '&groupId=' + params.groupId;
+            data += '&tickets[]='+params.tickets;
+
+            headers.append('Content-Type', 'application/x-www-form-urlencoded');
+
+            this.http.post(url, data, {headers}).map(res => res.json())
+              .subscribe(response => {
+                resolve(response);
+              }, (err) => {
+                reject('Falha ao finalizar aposta');
+              });
+          });
+        } else {
+          reject('Nenhuma aposta ativa');
+        }
+      });
+    });
+	}
+
 	addTicket(ticket): Promise<any> {
     return new Promise((resolve, reject) => {
       this.getCurrentBet().then((bet) => {
@@ -140,6 +190,22 @@ export class BetService {
       });
     });
   }
+
+	removeInvalidTickets(tickets): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getCurrentBet().then((bet) => {
+        var newTickets = [];
+        bet.tickets.forEach((i) => {
+          if (tickets.indexOf(i.id) == -1) {
+            newTickets.push(i);
+          }
+        });
+        bet.tickets = newTickets;
+        this._saveBet(bet);
+        resolve(bet);
+      });
+    });
+	}
 
 	getTicketByGameFromBet(bet, game): any {
     var ticket = null;
