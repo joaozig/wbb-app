@@ -1,32 +1,59 @@
 <ion-header>
-    <ion-navbar color="dark">
-      <button ion-button menuToggle>
-        <ion-icon name="menu"></ion-icon>
-      </button>
-      <ion-title>Adicionar Aposta</ion-title>
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar color="dark">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Adicionar Aposta</ion-title>
+  </ion-navbar>
+</ion-header>
 
-  <ion-content padding>
-    <div [hidden]="bet">
-      <ion-list>
-        <ion-item>
-          <ion-label floating>Nome do apostador</ion-label>
-          <ion-input type="text" [(ngModel)]="player.name"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label floating>Valor a ser apostado</ion-label>
-          <ion-input type="number" [(ngModel)]="player.betAmount"></ion-input>
-        </ion-item>
-      </ion-list>
-      <div style="margin-top: 35px;">
-        <button ion-button color="primary" block (click)="createBet()">
-          Adicionar Aposta
-        </button>
-      </div>
+<ion-content>
+  <div [hidden]="bet">
+    <ion-list>
+      <ion-item>
+        <ion-label floating>Nome do apostador</ion-label>
+        <ion-input type="text" [(ngModel)]="player.name"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Valor a ser apostado</ion-label>
+        <ion-input type="number" [(ngModel)]="player.betAmount"></ion-input>
+      </ion-item>
+    </ion-list>
+    <div style="margin-top: 35px;" padding>
+      <button ion-button color="primary" block (click)="createBet()">
+        Adicionar Aposta
+      </button>
     </div>
-    <div [hidden]="!bet">
-      Aposta Atual
-      <button ion-button (click)="removeBet()">Remover aposta</button>
-    </div>
-  </ion-content>
+  </div>
+  <div [hidden]="!bet">
+    <ion-card>
+      <ion-card-header>
+        Aposta Ativa
+      </ion-card-header>
+      <ion-card-content>
+        <div>
+          <strong>Apostador:</strong> {{bet?.playerName}}
+        </div>
+        <div>
+          <strong>Aposta:</strong> R$ {{util?.formattedValue(bet?.betAmount)}}
+        </div>
+        <div>
+          <strong>Palpites:</strong> {{bet?.tickets.length}}
+        </div>
+        <div>
+          <strong>Prêmio:</strong> R$ {{util?.formattedValue(bet?.jackpot())}}
+        </div>
+        <div class="card-buttons">
+          <button ion-button block color="dark" (click)="goToCurrentBet()">
+            Detalhar aposta
+          </button>
+          <button ion-button block outline
+            color="danger" (click)="removeBet()">
+
+            Excluir aposta
+          </button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

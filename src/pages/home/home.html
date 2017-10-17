@@ -16,7 +16,7 @@
   <ion-list [hidden]="loading">
     <div
       class="championship-list"
-      *ngFor="let championship of championships">
+      *ngFor="let championship of championships; let championshipIndex = index;">
 
       <ion-item
         class="championship-item"
@@ -31,7 +31,7 @@
 
       <ion-item class="item-game home-games"
                 [hidden]="!isGroupShown(championship)"
-                *ngFor="let game of championship.games">
+                *ngFor="let game of championship.games; let gameIndex = index;">
 
         <div>
           <div class="game-row">
@@ -41,13 +41,16 @@
           </div>
           <div class="game-row">
             <img [src]="game.teamA.img" class="left-team-img">
-            <button ion-button small *ngIf="game.alreadyAdded">
-              {{game.currentTicket.ticketType.toLowerCase()}}:<br>
+            <button ion-button small
+              class="button-game-added"
+              *ngIf="game.alreadyAdded">
+              {{game.currentTicket.ticketType.name.toLowerCase()}}:<br>
               {{game.currentTicket.name}} ({{util.formattedTaxValue(game.currentTicket.tax)}})
             </button>
             <ng-container *ngIf="!game.alreadyAdded">
               <button ion-button outline small color="dark"
                       *ngFor="let ticket of game.ticketType[0].tickets"
+                      (click)="addTicketToBet(ticket, game, championship, gameIndex, championshipIndex)"
                       style="margin-right: 8px">
 
                 {{util.formattedTaxValue(ticket.tax)}}

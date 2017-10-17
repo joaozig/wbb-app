@@ -1,5 +1,14 @@
 page-home {
   .championship-list {
+    .button-md {
+      text-transform: none;
+    }
+
+    .button-game-added {
+      padding: 25px 10px;
+      line-height: 1.7;
+    }
+
     .active {
       background-color: #E5E5E5 !important;
     }
@@ -23,26 +32,6 @@ page-home {
 
     ion-label.label {
       margin: 13px 10px !important;
-    }
-
-    .game-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .left-team-img {
-      float: left;
-      margin: auto auto auto 0;
-      width: 30px;
-      height: 30px;
-    }
-
-    .right-team-img {
-      float: right;
-      margin: auto 0 auto auto;
-      width: 30px;
-      height: 30px;
     }
   }
 }

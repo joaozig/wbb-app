@@ -76,6 +76,34 @@
 	font-size: 12px;
 }
 
+.game-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-team-img {
+  float: left;
+  margin: auto auto auto 0;
+  width: 30px;
+  height: 30px;
+}
+
+.right-team-img {
+  float: right;
+  margin: auto 0 auto auto;
+  width: 30px;
+  height: 30px;
+}
+
+.ticket-game-detail {
+  text-align: center;
+  color: #555;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.7;
+}
+
 .date-control-bar {
 	display: flex;
 	background-color: #8DB3C4;
