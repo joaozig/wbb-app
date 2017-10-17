@@ -18,6 +18,7 @@ import { ResultsPage } from '../pages/results/results';
 import { ManagerPage } from '../pages/manager/manager';
 import { FinancialPage } from '../pages/financial/financial';
 import { TicketsPage } from '../pages/tickets/tickets';
+import { PrintPage } from '../pages/print/print';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -36,6 +37,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ManagerPage,
     FinancialPage,
     TicketsPage,
+    PrintPage,
   ],
   imports: [
     BrowserModule,
@@ -56,6 +58,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ManagerPage,
     FinancialPage,
     TicketsPage,
+    PrintPage,
   ],
   providers: [
     StatusBar,

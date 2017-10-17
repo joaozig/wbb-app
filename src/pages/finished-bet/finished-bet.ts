@@ -3,6 +3,8 @@ import { NavController, AlertController, NavParams, Events } from 'ionic-angular
 
 import { Util } from '../../app/util';
 
+import { PrintPage } from '../print/print';
+
 import { BetService } from '../bet/bet.service';
 
 @Component({
@@ -40,6 +42,10 @@ export class FinishedBetPage {
         buttons: ['OK']
       }).present();
     });
+  }
+
+  printBet() {
+    this.navCtrl.push(PrintPage, {bet: this.bet});
   }
 
 	cancelBet() {
