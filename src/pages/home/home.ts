@@ -43,9 +43,11 @@ export class HomePage {
       this.bet = bet;
     });
 
-    this.events.subscribe('bet:changed', (bet) => {
+    this.events.subscribe('bet:changed', (bet, updateData=true) => {
       this.bet = bet;
-      this.updatePageData();
+      if(updateData) {
+        this.updatePageData();
+      }
     });
 
     this.events.subscribe('user:loaded', () => {
@@ -96,7 +98,7 @@ export class HomePage {
       this.betService.addTicket(ticket).then((bet) => {
         this.championships[championshipIndex].games[gameIndex].alreadyAdded = true;
         this.championships[championshipIndex].games[gameIndex].currentTicket = ticket;
-        this.events.publish('bet:changed', bet);
+        this.events.publish('bet:changed', bet, false);
       }, (errorMessage) => {
         this.alertCtrl.create({
           title: 'Algo falhou :(',
@@ -110,7 +112,9 @@ export class HomePage {
   updatePageData() {
     let championships = this.championships;
 		if(championships) {
-			championships.forEach((championship, index) => {
+
+      for(var i = 0; i < championships.length; i++) {
+        var championship = championships[i];
 				championship.games = championship.games.map((game) => {
           var ticket = this.betService.getTicketByGameFromBet(this.bet, game);
 					if (ticket) {
@@ -124,8 +128,25 @@ export class HomePage {
 
 					return game;
         });
-				this.championships[index] = championship;
-			});
+        this.championships[i] = championship;
+      }
+
+			// championships.forEach((championship, index) => {
+			// 	championship.games = championship.games.map((game) => {
+      //     var ticket = this.betService.getTicketByGameFromBet(this.bet, game);
+			// 		if (ticket) {
+      //       ticket.ticketType = {name: game.ticketType[0].name};
+      //       ticket.ticketType.game = JSON.parse(JSON.stringify(game));
+			// 			game.currentTicket = ticket;
+			// 			game.alreadyAdded = true;
+			// 		} else {
+			// 			game.alreadyAdded = false;
+			// 		}
+
+			// 		return game;
+      //   });
+			// 	this.championships[index] = championship;
+			// });
 		}
 	}
 }

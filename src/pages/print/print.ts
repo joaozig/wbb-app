@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 import {
   AlertController,
+  LoadingController,
   ViewController,
   NavParams,
   Events } from 'ionic-angular';
@@ -25,10 +26,13 @@ export class PrintPage {
     public params: NavParams,
     public events: Events,
     public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
     public viewCtrl: ViewController) {
 
     this.bet = params.get('bet');
-    bluetoothSerial.enable();
+    bluetoothSerial.enable().then(() => {
+      this.startScanning();
+    });
   }
 
   dismiss() {
@@ -44,90 +48,115 @@ export class PrintPage {
       this.unpairedDevices = success;
       this.loading = false;
     },(error) => {
-      console.log('unpaired devices error');
-      console.log(error);
+      this.loading = false;
+      this.alertCtrl.create({
+        title: 'Algo falhou :(',
+        message: 'Não foi possível listar os dispositivos não-pareados. Por favor, tente novamente',
+        buttons: ['OK']
+      }).present();
     });
 
     this.bluetoothSerial.list().then((success) => {
       this.pairedDevices = success;
+    }, (error) => {
+      this.alertCtrl.create({
+        title: 'Algo falhou :(',
+        message: 'Não foi possível listar os dispositivos pareados. Por favor, tente novamente',
+        buttons: ['OK']
+      }).present();
     });
   }
-
-  success = (data) => {
-    //alert(data);
-    this.bluetoothSerial.write(
-		'29/08/2017           2 Via 20:51\n'+
-		'  \n'+
-		'          * WORLDBETS *         \n'+
-		'  \n'+
-		'================================\n'+
-		'Cliente: NOME DO CLIENTE QUE E UM NOME GRANDE\n'+
-		'Vendedor: NOME DO VENDEDOR\n'+
-		'Data/Hora: 29/08/2017 20:52\n'+
-		'Codigo: 98S7S8DF7SD9F89S87F\n'+
-		'================================\n'+
-		'            PALPITES            \n'+
-		'--------------------------------\n'+
-		'Palmeiras 5 x 0 Sao Paulo\n'+
-		'20/08/2017 - 19:05 \n'+
-		'Palpite: VENCEDOR DO JOGO\n'+
-		'* Palmeiras x 1.29\n'+
-		'                         [ERROU]\n'+
-		'--------------------------------\n'+
-		'Palmeiras 5 x 0 Sao Paulo\n'+
-		'20/08/2017 - 19:05 \n'+
-		'Palpite: DUPLA CHANCE\n'+
-		'* Palmeiras ou empate x 2.25\n'+
-		'                       [ACERTOU]\n'+
-		'--------------------------------\n'+
-		'Palmeiras 5 x 0 Sao Paulo\n'+
-		'20/08/2017 - 19:05 \n'+
-		'Palpite: DUPLA CHANCE\n'+
-		'* Palmeiras ou empate x 2.25\n'+
-		'                      [PENDENTE]\n'+
-		'================================\n'+
-		'Valor da aposta: R$ 5,00\n'+
-		'Palpites: 2\n'+
-		'Premio Possivel: R$ 50,00\n'+
-		'--------------------------------\n'+
-		'* Sera considerado somente o \n'+
-		'resultado dos 90 minutos de jogo\n'+
-		'e acrescimos.\n'+
-		'* Prorrogacao e penaltis sao \n'+
-		'ignorados.\n'+
-		'* Premio valido somente com a \n'+
-		'apresentacao deste bilhete.\n'+
-		'\n'+
-		'\n'+
-		'________________________________\n'+
-		'    NOME DO VENDEDOR\n'+
-		' \n \n \n').then((success)=>{console.log(success);
-    }, (failed)=>{
-      console.log(failed);
-    });
-  }
-  fail = (error) => console.log(error);
 
   selectDevice(address: any) {
     this.alertCtrl.create({
-      title: 'Connect',
-      message: 'Do you want to connect with?',
+      title: 'Conectar ao dispositivo',
+      message: 'Você deseja se conectar ao dispositivo para imprimir a aposta?',
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           role: 'cancel',
-          handler: () => {
-            console.log('Cancel clicked');
-          }
+          handler: () => {}
         },
         {
-          text: 'Connect',
+          text: 'Conectar',
           handler: () => {
-            this.bluetoothSerial.connect(address).subscribe(this.success, this.fail);
+            this.printBet(address);
           }
         }
       ]
     }).present();
+  }
+
+  printBet(address) {
+    let loader = this.loadingCtrl.create({
+      content: 'Conectando...'
+    });
+    loader.present();
+
+		let arr="";
+		let cont=0;
+		let aposta="";
+		let premio="";
+		this.bet.tickets.forEach((item, index) => {
+      arr = arr+this.util.getRetiraAcentos(item.teamAname)+' x '+this.util.getRetiraAcentos(item.teamBname)+'\n'+item.gameDate+'\nPalpite: '+this.util.getRetiraAcentos(item.name)+'\n'+this.util.getRetiraAcentos(item.ticketType)+' x '+this.util.formattedTaxValue(item.tax)+'\n--------------------------------\n';
+      cont++;
+		});
+
+		//aposta = number_format(vm.bet.betAmount, 2, ',', '.');
+		aposta = this.util.formattedValue(this.bet.betAmount);
+		premio = this.util.formattedValue(this.bet.jackpot);
+    this.bluetoothSerial.connect(address).subscribe(data => {
+      loader.setContent('Imprimindo...');
+      this.bluetoothSerial.write(
+        this.util.getDateNow()+'                 '+this.util.getTimeNow()+'\n'+
+        '  \n'+
+        '          * WORLDBETS *         \n'+
+        '  \n'+
+        '================================\n'+
+        'Cliente: '+this.util.getRetiraAcentos(this.bet.playerName)+'\n'+
+        'Vendedor: '+this.util.getRetiraAcentos(this.bet.seller)+'\n'+
+        'Data/Hora: '+this.bet.date+'\n'+
+        'Codigo: '+this.bet.hash+'\n'+
+        '================================\n'+
+        '            PALPITES            \n'+
+        '--------------------------------\n'+
+        arr+''+
+        '================================\n'+
+        'Valor da aposta: R$ '+aposta+'\n'+
+        'Palpites: '+cont+'\n'+
+        'Premio Possivel: R$ '+premio+'\n'+
+        '--------------------------------\n'+
+        '* Sera considerado somente o \n'+
+        'resultado dos 90 minutos de jogo\n'+
+        'e acrescimos.\n'+
+        '* Prorrogacao e penaltis sao \n'+
+        'ignorados.\n'+
+        '* Premio valido somente com a \n'+
+        'apresentacao deste bilhete.\n'+
+        ' \n \n \n',
+      ).then(success => {
+        this.alertCtrl.create({
+          title: success,
+          message: 'Aposta impressa com sucesso!',
+          buttons: ['OK']
+        }).present();
+        loader.dismiss();
+      }, failed => {
+        this.alertCtrl.create({
+          title: failed,
+          message: 'Não foi possível imprimir a aposta. Por favor, tente novamente',
+          buttons: ['OK']
+        }).present();
+        loader.dismiss();
+      });
+    }, error => {
+      this.alertCtrl.create({
+        title: error,
+        message: 'Não foi possível se conectar ao dispositivo. Por favor, tente se conectar ao dispositivo novamente',
+        buttons: ['OK']
+      }).present();
+      loader.dismiss();
+    });
   }
 
   disconnect() {
