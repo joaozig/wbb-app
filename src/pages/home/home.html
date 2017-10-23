@@ -18,16 +18,16 @@
       class="championship-list"
       *ngFor="let championship of championships; let championshipIndex = index;">
 
-      <ion-item
+      <button ion-item
         class="championship-item"
         [ngClass]="{'active' : isGroupShown(championship)}"
         (click)="toggleGroup(championship)">
 
         <ion-icon name="add" [hidden]="isGroupShown(championship)"></ion-icon>
         <ion-icon name="remove" [hidden]="!isGroupShown(championship)"></ion-icon>
-        <img [src]="championship.country.img" class="country-img">
+        <ion-img [src]="championship.country.img" class="country-img"></ion-img>
         {{ championship.country.name }} - {{ championship.name }}
-      </ion-item>
+      </button>
 
       <ion-item class="item-game home-games"
                 [hidden]="!isGroupShown(championship)"
