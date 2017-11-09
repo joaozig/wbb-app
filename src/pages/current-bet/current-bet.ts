@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { 
-  NavController, 
-  AlertController, 
+import {
+  NavController,
+  AlertController,
   ModalController,
   Events } from 'ionic-angular';
 
@@ -101,6 +101,7 @@ export class CurrentBetPage {
             this.betService.removeBet().then(() => {
               this.bet = null;
               this.events.publish('bet:changed', null);
+              this.events.publish('bet:removed', null);
               this.navCtrl.pop();
             });
           }

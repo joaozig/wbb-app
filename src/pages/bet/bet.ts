@@ -29,15 +29,14 @@ export class BetPage {
       this.bet = bet;
     });
 
-    events.subscribe('bet:changed', (bet) => {
-      this.bet = bet;
+    events.subscribe('bet:removed', () => {
+      this.bet = null;
     });
   }
 
   createBet() {
     this.betService.addBet(this.player.name, this.player.betAmount)
       .then((bet) => {
-        this.bet = bet;
         if(this.navCtrl.length() == 1) {
           this.events.publish('root:change', HomePage);
         } else {
