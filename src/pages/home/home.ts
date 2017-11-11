@@ -32,7 +32,7 @@ export class HomePage {
     public betService: BetService,
     public gameService: GameService) { }
 
-  ngOnInit() {
+  ionViewDidLoad() {
     this.loading = true;
     this.loginService.getLoggedUser().then((user) => {
       this.user = user;
@@ -48,6 +48,11 @@ export class HomePage {
       if(updateData) {
         this.updatePageData();
       }
+    });
+
+    this.events.subscribe('bet:ticket-added',
+      (ticket, game, championship, gameIndex, championshipIndex, ticketTypeName) => {
+        this.addTicketToBet(ticket, game, championship, gameIndex, championshipIndex, ticketTypeName);
     });
 
     this.events.subscribe('user:loaded', () => {
@@ -77,23 +82,30 @@ export class HomePage {
     return group.show;
   }
 
-  seeMoreTickets(game, championship) {
+  seeMoreTickets(game, gameIndex, championship, championshipIndex) {
     this.navCtrl.push(TicketsPage, {
       bet: this.bet,
       user: this.user,
       game: game,
+      championship: championship,
       gameId: game.id,
       sportId: CONFIG.sportId,
-      countryId: championship.country.id
+      countryId: championship.country.id,
+      gameIndex: gameIndex,
+      championshipIndex: championshipIndex
     });
   }
 
-  addTicketToBet(ticket, game, championship, gameIndex, championshipIndex) {
+  addTicketToBet(ticket, game, championship, gameIndex, championshipIndex, ticketTypeName=null) {
     if (!this.bet) {
       this.navCtrl.push(BetPage);
     } else {
       game.championship = JSON.parse(JSON.stringify(championship));
-      ticket.ticketType = {name: game.ticketType[0].name};
+      if(ticketTypeName) {
+        ticket.ticketType = {name: ticketTypeName}
+      } else {
+        ticket.ticketType = {name: game.ticketType[0].name};
+      }
       ticket.ticketType.game = JSON.parse(JSON.stringify(game));
       this.betService.addTicket(ticket).then((bet) => {
         this.championships[championshipIndex].games[gameIndex].alreadyAdded = true;
@@ -130,23 +142,6 @@ export class HomePage {
         });
         this.championships[i] = championship;
       }
-
-			// championships.forEach((championship, index) => {
-			// 	championship.games = championship.games.map((game) => {
-      //     var ticket = this.betService.getTicketByGameFromBet(this.bet, game);
-			// 		if (ticket) {
-      //       ticket.ticketType = {name: game.ticketType[0].name};
-      //       ticket.ticketType.game = JSON.parse(JSON.stringify(game));
-			// 			game.currentTicket = ticket;
-			// 			game.alreadyAdded = true;
-			// 		} else {
-			// 			game.alreadyAdded = false;
-			// 		}
-
-			// 		return game;
-      //   });
-			// 	this.championships[index] = championship;
-			// });
 		}
 	}
 }

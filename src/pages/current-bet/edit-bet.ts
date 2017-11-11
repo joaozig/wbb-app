@@ -5,14 +5,13 @@ import {
   NavParams,
   Events } from 'ionic-angular';
 
-import { Util } from '../../app/util';
-
 import { BetService } from '../bet/bet.service';
+import { LoginService } from '../login/login.service';
 
 @Component({
   selector: 'page-edit-bet',
   templateUrl: 'edit-bet.html',
-  providers: [BetService]
+  providers: [BetService, LoginService]
 })
 export class EditBetPage {
   currentBet: any;

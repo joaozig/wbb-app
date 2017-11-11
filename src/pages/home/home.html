@@ -18,16 +18,16 @@
       class="championship-list"
       *ngFor="let championship of championships; let championshipIndex = index;">
 
-      <button ion-item
+      <ion-item
         class="championship-item"
         [ngClass]="{'active' : isGroupShown(championship)}"
         (click)="toggleGroup(championship)">
 
         <ion-icon name="add" [hidden]="isGroupShown(championship)"></ion-icon>
         <ion-icon name="remove" [hidden]="!isGroupShown(championship)"></ion-icon>
-        <ion-img [src]="championship.country.img" class="country-img"></ion-img>
+        <img [src]="championship.country.img" class="country-img">
         {{ championship.country.name }} - {{ championship.name }}
-      </button>
+      </ion-item>
 
       <ion-item class="item-game home-games"
                 [hidden]="!isGroupShown(championship)"
@@ -56,7 +56,7 @@
                 {{util.formattedTaxValue(ticket.tax)}}
               </button>
               <button ion-button outline small color="dark"
-                      (click)="seeMoreTickets(game, championship)">
+                      (click)="seeMoreTickets(game, gameIndex, championship, championshipIndex)">
                 mais {{game.total}} opções
               </button>
             </ng-container>

@@ -32,12 +32,13 @@
         {{ticketType.name}}
       </ion-item-divider>
 
-      <ion-item 
+      <ion-item tappable
+        (click)="addTicketToBet(ticket, ticketType)"
         [hidden]="!isGroupShown(ticketType)"
         *ngFor="let ticket of ticketType.tickets">
 
         {{ticket.name}}
-        <button  ion-button small item-end (click)="addTicketToBet(ticket, ticketType)">
+        <button ion-button small item-end>
           {{util.formattedTaxValue(ticket.tax)}}
         </button>
       </ion-item>

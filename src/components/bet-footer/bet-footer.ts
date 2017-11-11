@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NavController, Events } from 'ionic-angular';
 
 import { BetPage } from '../../pages/bet/bet';
+import { CurrentBetPage } from '../../pages/current-bet/current-bet';
 
 @Component({
   selector: 'bet-footer',
@@ -21,6 +22,10 @@ export class BetFooterComponent {
   }
 
   goToBet() {
-    this.navCtrl.push(BetPage);
+    if(this.bet) {
+      this.navCtrl.push(CurrentBetPage);
+    } else {
+      this.navCtrl.push(BetPage);
+    }
   }
 }
