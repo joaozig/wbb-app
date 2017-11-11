@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, NavParams, Events } from 'ionic-angular';
+import {
+  NavController,
+  AlertController,
+  NavParams,
+  Events
+} from 'ionic-angular';
 
 import { Util } from '../../app/util';
 
@@ -19,8 +24,11 @@ export class TicketsPage {
   bet: any;
   user: any;
   game: any;
+  championship: any;
   loading: Boolean = true;
   shownGroup: any;
+  gameIndex: any;
+  championshipIndex: any;
 
   constructor(
     public alertCtrl: AlertController,
@@ -33,8 +41,11 @@ export class TicketsPage {
     this.bet = navParams.get('bet');
     let user = navParams.get('user');
     let game = navParams.get('game');
+    this.championship = navParams.get('championship');
     let sportId = navParams.get('sportId');
     let countryId = navParams.get('countryId');
+    this.gameIndex = navParams.get('gameIndex');
+    this.championshipIndex = navParams.get('championshipIndex');
 
     this.gameService.getGame(game.id, sportId, countryId, user.id_group)
       .then((game) => {
@@ -68,19 +79,16 @@ export class TicketsPage {
     if (!this.bet) {
       this.navCtrl.push(BetPage);
     } else {
-      ticket.ticketType = {name: ticketType.name};
-      ticket.ticketType.game = JSON.parse(JSON.stringify(this.game));
-
-      this.betService.addTicket(ticket).then((bet) => {
-        this.events.publish('bet:changed', bet);
-        this.navCtrl.pop();
-      }, (errorMessage) => {
-        this.alertCtrl.create({
-          title: 'Algo falhou :(',
-          message: errorMessage,
-          buttons: ['OK']
-        }).present();
-      });
+      this.navCtrl.pop();
+      this.events.publish(
+        'bet:ticket-added',
+        ticket,
+        this.game,
+        this.championship,
+        this.gameIndex,
+        this.championshipIndex,
+        ticketType.name
+      );
     }
   }
 }

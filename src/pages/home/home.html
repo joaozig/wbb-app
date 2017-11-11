@@ -56,7 +56,7 @@
                 {{util.formattedTaxValue(ticket.tax)}}
               </button>
               <button ion-button outline small color="dark"
-                      (click)="seeMoreTickets(game, championship)">
+                      (click)="seeMoreTickets(game, gameIndex, championship, championshipIndex)">
                 mais {{game.total}} opções
               </button>
             </ng-container>
