@@ -63,6 +63,12 @@ export class TicketsPage {
 		);
   }
 
+  ionViewDidLoad() {
+    this.events.subscribe('bet:changed', (bet) => {
+      this.bet = bet;
+    });
+  }
+
   toggleGroup(group) {
     if (this.isGroupShown(group)) {
       this.shownGroup = null;

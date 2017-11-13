@@ -12,8 +12,9 @@ export class GameService {
 
   getChampionships(sportId, userGroupId): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = API_URL + '/includes/inc.championship.php';
-      url += '?sportId='+sportId+'&groupId='+userGroupId;
+      // let url = API_URL + '/includes/inc.championship.php';
+      let url = API_URL + '/includes/inc.get.championship.php';
+      url += '?groupId='+userGroupId;
 
       this.http.get(url).map(res => res.json()).subscribe(response => {
         if(response) {
@@ -23,6 +24,23 @@ export class GameService {
         }
       }, (error) => {
         reject('Não foi possível recuperar os campeonatos.');
+      });
+    });
+  }
+
+  getGames(championshipId, userGroupId): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let url = API_URL + '/includes/inc.get.games.championship.php';
+      url += '?groupId='+userGroupId + '&championshipId=' + championshipId;
+
+      this.http.get(url).map(res => res.json()).subscribe(response => {
+        if(response) {
+          resolve(response.championship[0].games);
+        } else {
+          resolve([]);
+        }
+      }, (error) => {
+        reject('Não foi possível recuperar os jogos.');
       });
     });
   }

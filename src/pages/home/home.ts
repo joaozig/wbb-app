@@ -59,10 +59,11 @@ export class HomePage {
       this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
         .then((championships) => {
           if(championships && championships.length > 0) {
+            console.log(championships.length)
             this.championships = championships;
-            this.toggleGroup(this.championships[0]);
+            // this.toggleGroup(this.championships[0]);
           }
-          this.updatePageData();
+          // this.updatePageData();
           this.loading = false;
         }, error => {
           this.alertCtrl.create({
@@ -75,6 +76,23 @@ export class HomePage {
   }
 
   toggleGroup(group) {
+    if(!group.games) {
+      group.loading = true;
+      this.gameService.getGames(group.id, this.user.id_group)
+      .then((games) => {
+        group.games = games;
+        this.updatePageData();
+        group.loading = false;
+      }, error => {
+        group.loading = false;
+        this.alertCtrl.create({
+          title: 'Algo falhou :(',
+          message: error,
+          buttons: ['OK']
+        }).present();
+      });
+    }
+
     group.show = !group.show;
   }
 
@@ -127,19 +145,21 @@ export class HomePage {
 
       for(var i = 0; i < championships.length; i++) {
         var championship = championships[i];
-				championship.games = championship.games.map((game) => {
-          var ticket = this.betService.getTicketByGameFromBet(this.bet, game);
-					if (ticket) {
-            ticket.ticketType = {name: game.ticketType[0].name};
-            ticket.ticketType.game = JSON.parse(JSON.stringify(game));
-						game.currentTicket = ticket;
-						game.alreadyAdded = true;
-					} else {
-						game.alreadyAdded = false;
-					}
+        if(championship.games) {
+          championship.games = championship.games.map((game) => {
+            var ticket = this.betService.getTicketByGameFromBet(this.bet, game);
+            if (ticket) {
+              ticket.ticketType = {name: ticket.ticketTypeName};
+              ticket.ticketType.game = JSON.parse(JSON.stringify(game));
+              game.currentTicket = ticket;
+              game.alreadyAdded = true;
+            } else {
+              game.alreadyAdded = false;
+            }
 
-					return game;
-        });
+            return game;
+          });
+        }
         this.championships[i] = championship;
       }
 		}

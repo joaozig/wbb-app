@@ -112,7 +112,7 @@ export class BetService {
             params.tickets = params.tickets.map((t) => {
               return t.id+'#'+t.tax;
             });
-      
+
             let url = API_URL + '/includes/inc.bets.php';
             let headers = new Headers();
             let data = 'playerName=' + params.playerName;
@@ -156,7 +156,8 @@ export class BetService {
             championship: ticket.ticketType.game.championship.name,
             gameDate: ticket.ticketType.game.date,
             gameTime: ticket.ticketType.game.time,
-            ticketType: ticket.ticketType.name
+            ticketType: ticket.ticketType.name,
+            ticketTypeName: ticket.ticketType.name
           };
           bet.tickets.push(newTicket);
           this._saveBet(bet);
@@ -179,7 +180,7 @@ export class BetService {
             index = i;
           }
         });
-    
+
         if (index !== null) {
           bet.tickets.splice(index, 1);
           this._saveBet(bet);
@@ -248,7 +249,7 @@ export class BetService {
   }
 
   private _saveBet(bet) {
-    this.storage.set(BetService.betKey, bet);   
+    this.storage.set(BetService.betKey, bet);
   }
 
   private _validateTicketDate(ticket) {
