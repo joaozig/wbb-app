@@ -59,11 +59,8 @@ export class HomePage {
       this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
         .then((championships) => {
           if(championships && championships.length > 0) {
-            console.log(championships.length)
             this.championships = championships;
-            // this.toggleGroup(this.championships[0]);
           }
-          // this.updatePageData();
           this.loading = false;
         }, error => {
           this.alertCtrl.create({
@@ -115,17 +112,23 @@ export class HomePage {
   }
 
   addTicketToBet(ticket, game, championship, gameIndex, championshipIndex, ticketTypeName=null) {
+    console.log('entrou 0')
     if (!this.bet) {
       this.navCtrl.push(BetPage);
     } else {
-      game.championship = JSON.parse(JSON.stringify(championship));
+      // game.championship = JSON.parse(JSON.stringify(championship));
+      game.championship = championship.country.name + ' - ' + championship.name;
+      // game.championship = championship.name;
+      console.log(game);
       if(ticketTypeName) {
         ticket.ticketType = {name: ticketTypeName}
       } else {
         ticket.ticketType = {name: game.ticketType[0].name};
       }
       ticket.ticketType.game = JSON.parse(JSON.stringify(game));
+      console.log('entrou 1')
       this.betService.addTicket(ticket).then((bet) => {
+        console.log('entrou 2')
         this.championships[championshipIndex].games[gameIndex].alreadyAdded = true;
         this.championships[championshipIndex].games[gameIndex].currentTicket = ticket;
         this.events.publish('bet:changed', bet, false);
@@ -137,6 +140,32 @@ export class HomePage {
         }).present();
       });
     }
+  }
+
+  removeTicketFromBet(ticket) {
+    this.alertCtrl.create({
+      title: 'Remover Palpite',
+      message: 'Você deseja realmente remover o palpite?',
+      buttons: [
+        {
+          text: 'Cancelar'
+        },
+        {
+          text: 'OK',
+          handler: () => {
+            this.betService.removeTicket(ticket.id).then((bet) => {
+              this.events.publish('bet:changed', bet);
+            }, () => {
+              this.alertCtrl.create({
+                title: 'Algo falhou :(',
+                message: 'Não foi possível remover o palpite da aposta',
+                buttons: ['OK']
+              }).present();
+            });
+          }
+        }
+      ]
+    }).present();
   }
 
   updatePageData() {

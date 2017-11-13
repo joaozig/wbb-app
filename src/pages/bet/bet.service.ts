@@ -153,7 +153,7 @@ export class BetService {
             teamAimg: ticket.ticketType.game.teamA.img,
             teamBname: ticket.ticketType.game.teamB.name,
             teamBimg: ticket.ticketType.game.teamB.img,
-            championship: ticket.ticketType.game.championship.name,
+            championship: ticket.ticketType.game.championship,
             gameDate: ticket.ticketType.game.date,
             gameTime: ticket.ticketType.game.time,
             ticketType: ticket.ticketType.name,
@@ -212,11 +212,17 @@ export class BetService {
     var ticket = null;
 
     if (bet) {
-      bet.tickets.forEach((t) => {
-        if (t.gameId == game.id) {
-          ticket = t;
+      let length = bet.tickets.length;
+      for(var i = 0; i < length; i++) {
+        if (bet.tickets[i].gameId == game.id) {
+          ticket = bet.tickets[i]; break;
         }
-      });
+      }
+      // bet.tickets.forEach((t) => {
+      //   if (t.gameId == game.id) {
+      //     ticket = t;
+      //   }
+      // });
     }
 
     return ticket;

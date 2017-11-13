@@ -46,6 +46,7 @@
             <div class="game-row">
               <img [src]="game.teamA.img" class="left-team-img">
               <button ion-button small
+                (click)="removeTicketFromBet(game.currentTicket)"
                 class="button-game-added"
                 *ngIf="game.alreadyAdded">
                 {{game.currentTicket.ticketType.name.toLowerCase()}}:<br>

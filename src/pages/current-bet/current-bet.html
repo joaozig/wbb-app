@@ -59,14 +59,15 @@
           <div>
             {{ticket.teamAname}} x {{ticket.teamBname}}
             <div class="ticket-game-detail">
-              {{ticket.championship}} - {{ticket.gameDate}} - {{ticket.gameTime}}
+                {{ticket.championship}}<br>
+               {{ticket.gameDate}} - {{ticket.gameTime}}
             </div>
           </div>
           <img [src]="ticket.teamBimg" class="right-team-img">
         </div>
         <div class="game-row">
           <span class="ticket-game-detail">
-            <strong>{{ticket.ticketType.name}}</strong>
+            <strong>{{ticket.ticketType}}</strong>
             <br>
             {{ticket.name}} ({{util?.formattedTaxValue(ticket.tax)}})
           </span>
@@ -75,7 +76,7 @@
       <ion-item-options>
         <button ion-button color="danger"
           (click)="removeTicket(ticket.id)">
-          
+
           Remover
         </button>
       </ion-item-options>
