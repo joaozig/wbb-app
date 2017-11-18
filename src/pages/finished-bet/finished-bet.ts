@@ -25,13 +25,14 @@ export class FinishedBetPage {
     public events: Events,
     public betService: BetService) {
 
+    let hash = navParams.get('hash');
+    let wasCurrentBet = navParams.get('currentBet');
+
     // removes CurrentBetPage from stack
-    let previousPage = this.navCtrl.last().component.name;
-    if (previousPage == 'CurrentBetPage') {
+    if (wasCurrentBet) {
       navCtrl.remove(navCtrl.length() - 1);
     }
 
-    let hash = navParams.get('hash');
     this.betService.getFinishedBet(hash).then((bet) => {
       this.bet = bet;
       this.loading = false;

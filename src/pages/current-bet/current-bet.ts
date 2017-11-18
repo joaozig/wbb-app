@@ -58,7 +58,10 @@ export class CurrentBetPage {
               if (response.success) {
                 this.betService.removeBet().then(() => {
                   this.events.publish('bet:changed', null);
-                  this.navCtrl.push(FinishedBetPage, {hash: response.bet});
+                  this.navCtrl.push(FinishedBetPage, {
+                    hash: response.bet,
+                    currentBet: true
+                  });
                 });
               } else {
                 this.alertCtrl.create({

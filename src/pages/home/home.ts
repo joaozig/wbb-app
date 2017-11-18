@@ -112,23 +112,17 @@ export class HomePage {
   }
 
   addTicketToBet(ticket, game, championship, gameIndex, championshipIndex, ticketTypeName=null) {
-    console.log('entrou 0')
     if (!this.bet) {
       this.navCtrl.push(BetPage);
     } else {
-      // game.championship = JSON.parse(JSON.stringify(championship));
       game.championship = championship.country.name + ' - ' + championship.name;
-      // game.championship = championship.name;
-      console.log(game);
       if(ticketTypeName) {
         ticket.ticketType = {name: ticketTypeName}
       } else {
         ticket.ticketType = {name: game.ticketType[0].name};
       }
       ticket.ticketType.game = JSON.parse(JSON.stringify(game));
-      console.log('entrou 1')
       this.betService.addTicket(ticket).then((bet) => {
-        console.log('entrou 2')
         this.championships[championshipIndex].games[gameIndex].alreadyAdded = true;
         this.championships[championshipIndex].games[gameIndex].currentTicket = ticket;
         this.events.publish('bet:changed', bet, false);
