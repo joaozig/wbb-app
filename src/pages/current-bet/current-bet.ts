@@ -138,4 +138,12 @@ export class CurrentBetPage {
       ]
     }).present();
   }
+
+  getTicketTypeName(ticketType) {
+    if(typeof ticketType == 'string') {
+      return ticketType;
+    } else {
+      return ticketType.name;
+    }
+  }
 }

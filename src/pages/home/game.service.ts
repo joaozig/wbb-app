@@ -28,10 +28,11 @@ export class GameService {
     });
   }
 
-  getGames(championshipId, userGroupId): Promise<any> {
+  getGames(championship, userGroupId): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = API_URL + '/includes/inc.get.games.championship.php';
-      url += '?groupId='+userGroupId + '&championshipId=' + championshipId;
+      url += '?groupId='+userGroupId + '&championshipId=' + championship.id;
+      url += '&countryId=' + championship.country.id;
 
       this.http.get(url).map(res => res.json()).subscribe(response => {
         if(response) {

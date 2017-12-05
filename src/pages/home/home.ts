@@ -23,6 +23,7 @@ export class HomePage {
   championships: Array<any> = [];
   util: any = Util;
   loading: Boolean;
+  refresher: any;
 
   constructor(
     public alertCtrl: AlertController,
@@ -56,26 +57,14 @@ export class HomePage {
     });
 
     this.events.subscribe('user:loaded', () => {
-      this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
-        .then((championships) => {
-          if(championships && championships.length > 0) {
-            this.championships = championships;
-          }
-          this.loading = false;
-        }, error => {
-          this.alertCtrl.create({
-            title: 'Algo falhou :(',
-            message: error,
-            buttons: ['OK']
-          }).present();
-        });
+      this.loadChampionships();
     });
   }
 
   toggleGroup(group) {
     if(!group.games) {
       group.loading = true;
-      this.gameService.getGames(group.id, this.user.id_group)
+      this.gameService.getGames(group, this.user.id_group)
       .then((games) => {
         group.games = games;
         this.updatePageData();
@@ -186,5 +175,29 @@ export class HomePage {
         this.championships[i] = championship;
       }
 		}
-	}
+  }
+
+  loadChampionships() {
+    this.gameService.getChampionships(CONFIG.sportId, this.user.id_group)
+    .then((championships) => {
+      if(championships && championships.length > 0) {
+        this.championships = championships;
+      }
+      this.loading = false;
+      if(this.refresher) {
+        this.refresher.complete();
+      }
+    }, error => {
+      this.alertCtrl.create({
+        title: 'Algo falhou :(',
+        message: error,
+        buttons: ['OK']
+      }).present();
+    });
+  }
+
+  doRefresh(refresher) {
+    this.refresher = refresher;
+    this.loadChampionships();
+  }
 }

@@ -67,7 +67,7 @@
         </div>
         <div class="game-row">
           <span class="ticket-game-detail">
-            <strong>{{ticket.ticketType}}</strong>
+            <strong>{{getTicketTypeName(ticket.ticketType)}}</strong>
             <br>
             {{ticket.name}} ({{util?.formattedTaxValue(ticket.tax)}})
           </span>

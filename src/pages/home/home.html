@@ -13,6 +13,9 @@
     <ion-spinner></ion-spinner>
   </div>
 
+  <ion-refresher (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-list [hidden]="loading">
     <div
       class="championship-list"
