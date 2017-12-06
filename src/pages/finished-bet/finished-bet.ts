@@ -17,6 +17,7 @@ export class FinishedBetPage {
   util: any = Util;
   bet: any;
   loading: boolean = true;
+  wasCurrentBet: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -26,10 +27,14 @@ export class FinishedBetPage {
     public betService: BetService) {
 
     let hash = navParams.get('hash');
-    let wasCurrentBet = navParams.get('currentBet');
+    this.wasCurrentBet = navParams.get('currentBet');
+
+    this.events.subscribe('print:finished', () => {
+      this.navCtrl.pop();
+    });
 
     // removes CurrentBetPage from stack
-    if (wasCurrentBet) {
+    if (this.wasCurrentBet) {
       navCtrl.remove(navCtrl.length() - 1);
     }
 

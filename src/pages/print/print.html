@@ -14,7 +14,7 @@
   <ion-list padding>
     <button ion-button block (click)="startScanning()">Procurar dispositivos</button>
     <ion-list-header>
-      Paired Devices
+      Aparelhos pareados
     </ion-list-header>
     <button ion-item
       *ngFor="let device of pairedDevices"
@@ -23,7 +23,7 @@
       {{device.name}}
     </button>
     <ion-list-header>
-      available Devices
+      Aparelhos não-pareados
     </ion-list-header>
     <button ion-item
       *ngFor='let device of unpairedDevices'

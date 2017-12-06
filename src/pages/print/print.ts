@@ -45,7 +45,17 @@ export class PrintPage {
     this.loading = true;
 
     this.bluetoothSerial.discoverUnpaired().then((success) => {
-      this.unpairedDevices = success;
+      success.forEach((device) => {
+        let newDevice = true;
+        this.pairedDevices.forEach((pairedDevice) => {
+          if(pairedDevice.address == device.address) {
+            newDevice = false;
+          }
+        });
+        if(newDevice) {
+          this.unpairedDevices.push(device);
+        }
+      });
       this.loading = false;
     },(error) => {
       this.loading = false;
@@ -135,12 +145,14 @@ export class PrintPage {
         'apresentacao deste bilhete.\n'+
         ' \n \n \n',
       ).then(success => {
-        this.alertCtrl.create({
-          title: success,
-          message: 'Aposta impressa com sucesso!',
-          buttons: ['OK']
-        }).present();
+        // this.alertCtrl.create({
+        //   title: success,
+        //   message: 'Aposta impressa com sucesso!',
+        //   buttons: ['OK']
+        // }).present();
         loader.dismiss();
+        this.dismiss();
+        this.events.publish('print:finished');
       }, failed => {
         this.alertCtrl.create({
           title: failed,
